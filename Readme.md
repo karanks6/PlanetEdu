@@ -185,6 +185,80 @@ npm run lint
 
 ---
 
+## Hosting & Deployment Guide
+
+This project is a high-performance modern web application built on Vite. It is pre-configured with `vercel.json` and `render.yaml` for zero-configuration, 1-click deployment on both **Vercel** and **Render**.
+
+### Option A: Hosting on Vercel (Recommended — Free & Instant)
+
+Vercel provides edge CDN delivery, automatic SSL, and instant continuous deployment on every Git push.
+
+#### Method 1: Via GitHub (Recommended)
+1. **Push your code to GitHub**:
+   ```bash
+   git init
+   git add .
+   git commit -m "feat: complete PlanetEdu cinematic hero"
+   git branch -M main
+   git remote add origin https://github.com/<your-username>/<your-repo-name>.git
+   git push -u origin main
+   ```
+2. **Import into Vercel**:
+   - Go to [vercel.com](https://vercel.com) and log in with your GitHub account.
+   - Click **"Add New..."** → **"Project"**.
+   - Locate your repository from the list and click **"Import"**.
+3. **Build & Output Settings**:
+   - **Framework Preset**: `Vite` *(auto-detected)*.
+   - **Root Directory**: `./` *(default)*.
+   - **Build Command**: `npm run build` *(pre-configured in `vercel.json`)*.
+   - **Output Directory**: `dist` *(pre-configured in `vercel.json`)*.
+4. **Deploy**:
+   - Click **"Deploy"**.
+   - In ~20 seconds, your website will be live on a production URL: `https://<your-project>.vercel.app`.
+
+#### Method 2: Via Vercel CLI
+If you prefer deploying directly from your local terminal without Git:
+```bash
+npm install -g vercel
+vercel login
+vercel
+# When prompted, accept defaults.
+# To deploy directly to production:
+vercel --prod
+```
+
+---
+
+### Option B: Hosting on Render (Free Static Site)
+
+Render offers free static site hosting with built-in SSL and continuous deployment from GitHub.
+
+#### Method 1: Using the Included Blueprint (`render.yaml`)
+1. Push your code to a GitHub repository.
+2. Go to the [Render Dashboard](https://dashboard.render.com).
+3. Click the **"New +"** button in the top right and select **"Blueprint"**.
+4. Connect your GitHub repository.
+5. Render detects `render.yaml` and sets up:
+   - **Type**: `Static Site`
+   - **Build Command**: `npm install && npm run build`
+   - **Publish Directory**: `./dist`
+   - **SPA Routing Rewrite**: `/*` → `/index.html`
+6. Click **"Apply"** to deploy.
+
+#### Method 2: Manual Dashboard Setup
+1. In the [Render Dashboard](https://dashboard.render.com), click **"New +"** → **"Static Site"**.
+2. Connect your GitHub repository.
+3. Fill in the fields:
+   - **Name**: `planet-edu`
+   - **Branch**: `main`
+   - **Build Command**: `npm run build`
+   - **Publish Directory**: `dist`
+   - **Advanced Rewrite**: `/*` → `/index.html`
+5. Click **"Create Static Site"**.
+6. Render builds the project and publishes it to `https://planet-edu.onrender.com`.
+
+---
+
 ## Testing & Quality Assurance
 
 The codebase includes automated unit tests covering all pure logic and astronomical calculations in `src/planet-logic.test.ts`:
