@@ -1298,18 +1298,35 @@
             // On the planet globe
             float z = sqrt(max(0.0, u_radius * u_radius - dist * dist));
             vec3 N = normalize(vec3(d.x, d.y, z));
-            float lon = atan(N.x, N.z);
-            float lat = asin(clamp(N.y, -1.0, 1.0));
+
+            // Uranus (u_planet == 6) has an extreme 97.77° axial tilt — it famously rotates on its side!
+            vec3 N_spin = N;
+            if (u_planet == 6) {
+              float angU = 1.37; // ~78.5° tilt in view plane
+              float cU = cos(angU);
+              float sU = sin(angU);
+              N_spin.xy = vec2(cU * N.x - sU * N.y, sU * N.x + cU * N.y);
+            }
+
+            float lon = atan(N_spin.x, N_spin.z);
+            float lat = asin(clamp(N_spin.y, -1.0, 1.0));
 
             float speed = 0.018;
             if (u_planet == 0) speed = 0.008;
             else if (u_planet == 4) speed = 0.032;
             else if (u_planet == 5) speed = 0.024;
-            else if (u_planet == 7) speed = 0.026;
+            else if (u_planet == 6) speed = -0.030; // Retrograde sideways rotation
+            else if (u_planet == 7) speed = 0.046;  // Supersonic winds (>2,100 km/h)
 
             float zonalWave = 0.0;
             if (u_planet == 5) {
               zonalWave = sin(lat * 26.0 + lon * 2.0 + u_time * 0.14) * 0.015 + sin(lat * 52.0 - u_time * 0.08) * 0.007;
+            } else if (u_planet == 6) {
+              // Uranus differential atmospheric wave shear & methane haze oscillation
+              zonalWave = sin(lat * 18.0 + lon * 2.5 + u_time * 0.18) * 0.022 + cos(lat * 36.0 - u_time * 0.12) * 0.010;
+            } else if (u_planet == 7) {
+              // Neptune supersonic counter-flowing jet streams and shearing turbulence
+              zonalWave = sin(lat * 26.0 + lon * 3.5 + u_time * 0.38) * 0.032 + sin(lat * 52.0 - lon * 2.0 - u_time * 0.22) * 0.016 + cos(lat * 14.0 + u_time * 0.16) * 0.020;
             }
 
             float u = lon / 6.2831853 + 0.5 + u_time * speed + zonalWave;
@@ -1317,6 +1334,17 @@
 
             vec4 tex = texture2D(u_tex, vec2(fract(u), v));
             vec3 col = tex.rgb;
+
+            // Micro-shimmer / atmospheric dynamics
+            if (u_planet == 6) {
+              // Uranus methane haze micro-variation
+              float uShimmer = sin(lon * 12.0 + lat * 28.0 + u_time * 0.35) * 0.025;
+              col = clamp(col + vec3(uShimmer * 0.5, uShimmer * 0.9, uShimmer * 1.0), 0.0, 1.0);
+            } else if (u_planet == 7) {
+              // Neptune supersonic jet shear dynamic brightness & cloud glimmer
+              float nepGlint = sin(lon * 16.0 - lat * 36.0 + u_time * 0.75) * 0.035;
+              col = clamp(col + vec3(nepGlint * 0.3, nepGlint * 0.75, nepGlint * 1.15), 0.0, 1.0);
+            }
 
             // Lighting & Atmosphere
             float NdotL = dot(N, sunDir);
@@ -1350,6 +1378,10 @@
             float rim = pow(fresnel, 3.2);
             if (u_planet == 5) {
               col += vec3(0.92, 0.82, 0.58) * (rim * (0.35 + 0.65 * max(NdotL, 0.0)) * 1.35);
+            } else if (u_planet == 6) {
+              col += vec3(0.48, 0.94, 0.98) * (rim * (0.35 + 0.65 * max(NdotL, 0.0)) * 1.35);
+            } else if (u_planet == 7) {
+              col += vec3(0.30, 0.72, 1.0) * (rim * (0.35 + 0.65 * max(NdotL, 0.0)) * 1.45);
             } else if (u_planet != 0) {
               col += atmoColor * (rim * (0.35 + 0.65 * max(NdotL, 0.0)) * 1.25);
             } else {
@@ -1595,61 +1627,180 @@
             }
           }
           else if (planetKey === 'uranus') {
+            // Uranus: Aquamarine atmosphere with polar collars, methane haze belts, and longitudinal cirrus streamers
             const grad = ctx.createLinearGradient(0, 0, 0, 512);
-            grad.addColorStop(0, '#8fe2ec');
-            grad.addColorStop(0.3, '#70d2e2');
-            grad.addColorStop(0.5, '#56c2d6');
-            grad.addColorStop(0.7, '#70d2e2');
-            grad.addColorStop(1, '#8fe2ec');
+            grad.addColorStop(0.00, '#389aa9');
+            grad.addColorStop(0.12, '#50b8c8');
+            grad.addColorStop(0.25, '#68d0e0');
+            grad.addColorStop(0.40, '#7ce2f0');
+            grad.addColorStop(0.50, '#62cde0');
+            grad.addColorStop(0.65, '#56c2d5');
+            grad.addColorStop(0.85, '#44aab9');
+            grad.addColorStop(1.00, '#308c9a');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, 1024, 512);
 
-            for (let y = 0; y < 512; y += 12) {
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
-              ctx.fillRect(0, y, 1024, 4);
+            // Subtle zonal banding with differential tonal gradients
+            for (let y = 0; y < 512; y += 6) {
+              const bandFactor = Math.sin(y * 0.14) * 0.5 + 0.5;
+              ctx.fillStyle = `rgba(255, 255, 255, ${0.03 + bandFactor * 0.07})`;
+              ctx.fillRect(0, y, 1024, 3);
+            }
+
+            // Bright North and South Polar hoods & collars (as observed by Hubble & JWST)
+            const northCollar = ctx.createLinearGradient(0, 30, 0, 110);
+            northCollar.addColorStop(0, 'rgba(215, 250, 255, 0.45)');
+            northCollar.addColorStop(1, 'rgba(215, 250, 255, 0.0)');
+            ctx.fillStyle = northCollar;
+            ctx.fillRect(0, 30, 1024, 80);
+
+            const southCollar = ctx.createLinearGradient(0, 400, 0, 480);
+            southCollar.addColorStop(0, 'rgba(215, 250, 255, 0.0)');
+            southCollar.addColorStop(1, 'rgba(215, 250, 255, 0.40)');
+            ctx.fillStyle = southCollar;
+            ctx.fillRect(0, 400, 1024, 80);
+
+            // Subtle atmospheric longitude-variation mottling
+            for (let i = 0; i < 48; i++) {
+              const mx = (i * 87) % 1024;
+              const my = 80 + (i * 37) % 350;
+              const mw = 70 + (i * 13) % 90;
+              const mh = 14 + (i * 5) % 18;
+              ctx.fillStyle = (i % 2 === 0) ? 'rgba(255, 255, 255, 0.09)' : 'rgba(32, 115, 130, 0.08)';
+              ctx.beginPath();
+              ctx.ellipse(mx, my, mw, mh, 0, 0, Math.PI * 2);
+              ctx.fill();
+            }
+
+            // Prominent high-altitude methane cirrus streamers across longitudes
+            for (let i = 0; i < 55; i++) {
+              const cx = (i * 117 + Math.sin(i * 1.7) * 45) % 1024;
+              const cy = 90 + (i * 31) % 330;
+              const len = 50 + (i * 23) % 120;
+              const curve = ((i % 4) - 1.5) * 6;
+
+              // Soft shadow underneath cirrus
+              ctx.strokeStyle = 'rgba(25, 85, 98, 0.35)';
+              ctx.lineWidth = 3.0;
+              ctx.beginPath();
+              ctx.moveTo(cx, cy + 3);
+              ctx.bezierCurveTo(cx + len * 0.35, cy + curve + 3, cx + len * 0.7, cy - curve + 3, cx + len, cy + 3);
+              ctx.stroke();
+
+              // Radiant white methane cloud streak
+              ctx.strokeStyle = 'rgba(250, 255, 255, 0.78)';
+              ctx.lineWidth = 2.0 + (i % 2);
+              ctx.beginPath();
+              ctx.moveTo(cx, cy);
+              ctx.bezierCurveTo(cx + len * 0.35, cy + curve, cx + len * 0.7, cy - curve, cx + len, cy);
+              ctx.stroke();
+            }
+
+            // Convective bright storm plumes (like 2014 & 2023 Hubble/Keck observations)
+            const stormPlumes = [
+              { x: 210, y: 195, r: 18, tail: 90 },
+              { x: 470, y: 310, r: 14, tail: 70 },
+              { x: 740, y: 230, r: 22, tail: 110 },
+              { x: 920, y: 285, r: 16, tail: 80 }
+            ];
+            for (const sp of stormPlumes) {
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+              ctx.beginPath();
+              ctx.ellipse(sp.x, sp.y, sp.r, sp.r * 0.6, 0.05, 0, Math.PI * 2);
+              ctx.fill();
+
+              // Trailing vortex wake
+              ctx.strokeStyle = 'rgba(240, 255, 255, 0.60)';
+              ctx.lineWidth = 3.0;
+              ctx.beginPath();
+              ctx.moveTo(sp.x + sp.r, sp.y);
+              ctx.bezierCurveTo(sp.x + sp.r + sp.tail * 0.4, sp.y - 4, sp.x + sp.r + sp.tail * 0.7, sp.y + 6, sp.x + sp.r + sp.tail, sp.y);
+              ctx.stroke();
             }
           }
           else if (planetKey === 'neptune') {
+            // Neptune: Supersonic cobalt & azure atmosphere, Great Dark Spot, companion Scooter, and methane jet streamers
             const grad = ctx.createLinearGradient(0, 0, 0, 512);
-            grad.addColorStop(0, '#0a2e7a');
-            grad.addColorStop(0.25, '#1248a8');
-            grad.addColorStop(0.5, '#0c358e');
-            grad.addColorStop(0.75, '#1248a8');
-            grad.addColorStop(1, '#0a2e7a');
+            grad.addColorStop(0.00, '#051948');
+            grad.addColorStop(0.15, '#0c3590');
+            grad.addColorStop(0.30, '#134ec0');
+            grad.addColorStop(0.48, '#0b328a');
+            grad.addColorStop(0.65, '#1658d2');
+            grad.addColorStop(0.82, '#0d3795');
+            grad.addColorStop(1.00, '#061c50');
             ctx.fillStyle = grad;
             ctx.fillRect(0, 0, 1024, 512);
 
+            // Supersonic jet stream bands with alternating tone & shear
             for (let y = 0; y < 512; y += 8) {
-              ctx.fillStyle = (y % 16 === 0) ? 'rgba(5, 20, 65, 0.25)' : 'rgba(30, 95, 210, 0.18)';
-              ctx.fillRect(0, y, 1024, 4);
+              const isDarkBelt = (y % 24 < 12);
+              ctx.fillStyle = isDarkBelt ? 'rgba(3, 14, 48, 0.38)' : 'rgba(35, 110, 235, 0.24)';
+              ctx.fillRect(0, y, 1024, 5);
             }
 
-            ctx.fillStyle = '#051848';
+            // Great Dark Spot (GDS-89): iconic anticyclonic vortex
+            const gdsX = 390;
+            const gdsY = 275;
+            // Dark vortex envelope
+            ctx.fillStyle = '#020b22';
             ctx.beginPath();
-            ctx.ellipse(440, 280, 52, 28, -0.08, 0, Math.PI * 2);
+            ctx.ellipse(gdsX, gdsY, 56, 30, -0.09, 0, Math.PI * 2);
             ctx.fill();
 
-            ctx.fillStyle = '#f0f7ff';
+            // Internal vortex ring
+            ctx.strokeStyle = 'rgba(12, 45, 115, 0.8)';
+            ctx.lineWidth = 4;
             ctx.beginPath();
-            ctx.ellipse(440, 256, 38, 7, -0.05, 0, Math.PI * 2);
+            ctx.ellipse(gdsX, gdsY, 44, 22, -0.09, 0, Math.PI * 2);
+            ctx.stroke();
+
+            // "Scooter" companion cloud: fast-moving bright white methane cirrus south of GDS
+            ctx.fillStyle = '#ffffff';
+            ctx.beginPath();
+            ctx.ellipse(gdsX - 10, gdsY - 26, 36, 7, -0.05, 0, Math.PI * 2);
             ctx.fill();
 
-            for (let i = 0; i < 45; i++) {
-              const cx = (i * 123 + Math.sin(i) * 60) % 1024;
-              const cy = 120 + (i * 47) % 280;
-              const len = 40 + (i * 17) % 110;
-              ctx.strokeStyle = 'rgba(235, 246, 255, 0.75)';
-              ctx.lineWidth = 2.5 + (i % 3);
-              ctx.beginPath();
-              ctx.moveTo(cx, cy);
-              ctx.bezierCurveTo(cx + len * 0.4, cy - 3, cx + len * 0.7, cy + 4, cx + len, cy);
-              ctx.stroke();
+            // Flanking methane plumes around GDS
+            ctx.strokeStyle = 'rgba(235, 248, 255, 0.88)';
+            ctx.lineWidth = 2.5;
+            ctx.beginPath();
+            ctx.moveTo(gdsX + 45, gdsY + 8);
+            ctx.bezierCurveTo(gdsX + 80, gdsY + 14, gdsX + 110, gdsY + 5, gdsX + 140, gdsY + 10);
+            ctx.stroke();
 
-              ctx.strokeStyle = 'rgba(4, 18, 55, 0.4)';
-              ctx.lineWidth = 2;
+            // Southern Dark Spot (DS2 / "Wizard's Eye")
+            const ds2X = 760;
+            const ds2Y = 345;
+            ctx.fillStyle = '#03102c';
+            ctx.beginPath();
+            ctx.ellipse(ds2X, ds2Y, 34, 18, 0.06, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = '#f2f8ff';
+            ctx.beginPath();
+            ctx.ellipse(ds2X, ds2Y, 12, 6, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // 70+ supersonic methane cirrus streamer ribbons across all longitudes
+            for (let i = 0; i < 70; i++) {
+              const cx = (i * 109 + Math.sin(i * 1.3) * 60) % 1024;
+              const cy = 100 + (i * 39) % 310;
+              const len = 45 + (i * 19) % 130;
+              const waveY = Math.sin(i * 2.1) * 7;
+
+              // Dark shadow cast by high cirrus on deeper blue clouds
+              ctx.strokeStyle = 'rgba(2, 10, 35, 0.55)';
+              ctx.lineWidth = 3.2;
               ctx.beginPath();
               ctx.moveTo(cx, cy + 4);
-              ctx.bezierCurveTo(cx + len * 0.4, cy + 1, cx + len * 0.7, cy + 8, cx + len, cy + 4);
+              ctx.bezierCurveTo(cx + len * 0.35, cy + waveY + 4, cx + len * 0.7, cy - waveY + 4, cx + len, cy + 4);
+              ctx.stroke();
+
+              // Brilliant white & cyan high cirrus streamer
+              ctx.strokeStyle = (i % 3 === 0) ? 'rgba(255, 255, 255, 0.92)' : 'rgba(215, 242, 255, 0.78)';
+              ctx.lineWidth = 2.0 + (i % 2) * 1.2;
+              ctx.beginPath();
+              ctx.moveTo(cx, cy);
+              ctx.bezierCurveTo(cx + len * 0.35, cy + waveY, cx + len * 0.7, cy - waveY, cx + len, cy);
               ctx.stroke();
             }
           }
@@ -1771,7 +1922,7 @@
         function initWebGL() {
           if (!planetCanvas) return;
           try {
-            gl = planetCanvas.getContext('webgl', { antialias: true, alpha: true, depth: false });
+            gl = planetCanvas.getContext('webgl', { antialias: true, alpha: true, depth: false, preserveDrawingBuffer: true });
           } catch (e) {
             gl = null;
           }
