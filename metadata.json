@@ -1,0 +1,6 @@
+{
+  "name": "SpaceEdu - Solar System Cinematic Hero",
+  "description": "Full-viewport space-themed educational hero section showcasing Earth, Venus, and Mars with video backdrops and interactive orbital switching.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
