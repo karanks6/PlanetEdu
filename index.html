@@ -50,28 +50,65 @@
       .stage{position:fixed; inset:0; overflow:hidden; isolation:isolate}
 
       .sky{position:absolute; inset:0; z-index:0;
-        background-color:#030b18;
-        background-image:radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)),
-                         radial-gradient(1.5px 1.5px at 120px 180px, #ffffff, rgba(0,0,0,0)),
-                         radial-gradient(1px 1px at 300px 90px, rgba(255,255,255,0.8), rgba(0,0,0,0)),
-                         radial-gradient(1.5px 1.5px at 450px 240px, #79dce8, rgba(0,0,0,0)),
-                         radial-gradient(1px 1px at 700px 140px, #ffffff, rgba(0,0,0,0)),
-                         radial-gradient(1.5px 1.5px at 950px 80px, #ffffff, rgba(0,0,0,0)),
-                         radial-gradient(1px 1px at 1200px 220px, #79dce8, rgba(0,0,0,0)),
-                         radial-gradient(1.5px 1.5px at 1340px 160px, #ffffff, rgba(0,0,0,0));
+        background-color:#020612;
+        background-image:url('https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_cf55d1d8-7b59-4a64-80da-d72052ae974e.png');
         background-size:cover;
-        background-position:center;
+        background-position:center top;
         background-repeat:no-repeat;
         overflow:hidden}
 
-      .sky video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
-        display:block; opacity:0; z-index:2; transition:opacity .28s linear}
-      .sky video.is-active{opacity:1}
-      @media (prefers-reduced-motion:reduce){ .sky video{display:none} }
+      /* Continuous Moving Galaxy Sky Backdrop for procedural planets */
+      .sky-galaxy-wrap{
+        position:absolute; inset:0; z-index:0; overflow:hidden;
+        pointer-events:none;
+      }
+      .sky-bg-video{
+        position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+        display:block; opacity:1;
+        transform:scale(1.04);
+        animation:galaxy-drift 32s ease-in-out infinite alternate;
+        will-change:transform;
+      }
+      @keyframes galaxy-drift{
+        0%{ transform:scale(1.03) translate3d(0, 0, 0) rotate(0deg); }
+        50%{ transform:scale(1.07) translate3d(-1.5%, -1%, 0) rotate(0.35deg); }
+        100%{ transform:scale(1.03) translate3d(1%, -0.6%, 0) rotate(-0.25deg); }
+      }
+      .sky-galaxy-vignette{
+        position:absolute; inset:0;
+        background:linear-gradient(180deg, rgba(2,6,18,0.08) 0%, rgba(2,6,18,0.0) 25%, rgba(2,6,18,0.65) 55%, #020612 85%);
+        pointer-events:none;
+      }
+      .sky-twinkle{
+        position:absolute; inset:0; pointer-events:none;
+        background-image:
+          radial-gradient(1.5px 1.5px at 15% 18%, rgba(255,255,255,0.95), transparent),
+          radial-gradient(1.2px 1.2px at 32% 10%, rgba(121,220,232,0.9), transparent),
+          radial-gradient(2px 2px at 48% 24%, rgba(255,255,255,0.95), transparent),
+          radial-gradient(1px 1px at 64% 14%, rgba(255,255,255,0.85), transparent),
+          radial-gradient(1.5px 1.5px at 82% 20%, rgba(121,220,232,0.95), transparent),
+          radial-gradient(1px 1px at 92% 32%, rgba(255,255,255,0.8), transparent),
+          radial-gradient(2px 2px at 22% 34%, rgba(255,255,255,0.9), transparent),
+          radial-gradient(1.2px 1.2px at 75% 36%, rgba(121,220,232,0.85), transparent);
+        animation:star-shimmer 4.5s ease-in-out infinite alternate;
+        will-change:opacity;
+      }
+      @keyframes star-shimmer{
+        0%{ opacity:0.35; transform:translateY(0); }
+        50%{ opacity:0.85; transform:translateY(-1px); }
+        100%{ opacity:0.45; transform:translateY(0); }
+      }
+
+      .sky video.fg-video{position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+        display:block; opacity:0; z-index:3; transition:opacity .28s linear}
+      .sky video.fg-video.is-active{opacity:1}
+      @media (prefers-reduced-motion:reduce){
+        .sky video.fg-video, .sky-bg-video, .sky-twinkle{display:none !important; animation:none !important}
+      }
 
       /* --- CINEMATIC 3D PLANETARY WEBGL CANVAS VISUAL EFFECT --- */
       .planet-canvas{
-        position:absolute; inset:0; width:100%; height:100%; z-index:1;
+        position:absolute; inset:0; width:100%; height:100%; z-index:2;
         opacity:0; pointer-events:none;
         transition:opacity .35s ease-out;
       }
@@ -792,12 +829,23 @@
   <body>
     <div class="stage">
       <div class="sky">
+        <!-- Live Moving Venus Galaxy Sky Video Background (Active for Mercury, Jupiter, Saturn, Uranus, Neptune) -->
+        <div class="sky-galaxy-wrap">
+          <video id="galaxy-bg-video" class="sky-bg-video is-active" muted loop playsinline autoplay preload="auto"
+                 src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_b211cd74-013b-4dd3-bfd0-64491d8696fa.mp4"
+                 poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_cf55d1d8-7b59-4a64-80da-d72052ae974e.png"
+                 aria-hidden="true"></video>
+          <div class="sky-galaxy-vignette" aria-hidden="true"></div>
+          <div class="sky-twinkle" aria-hidden="true"></div>
+        </div>
+
         <!-- 3D Animated Planetary Visual Horizon Canvas -->
         <canvas id="planet-canvas" class="planet-canvas is-active" aria-hidden="true"></canvas>
 
-        <video data-planet="venus" muted loop playsinline preload="none" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_b211cd74-013b-4dd3-bfd0-64491d8696fa.mp4" poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_cf55d1d8-7b59-4a64-80da-d72052ae974e.png" aria-hidden="true"></video>
-        <video data-planet="earth" muted loop playsinline preload="none" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_3ffb4889-c520-432d-8458-038009eb40df.mp4" poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_508c64b8-a31e-4290-bdfc-1187df70e0a6.png" aria-hidden="true"></video>
-        <video data-planet="mars" muted loop playsinline preload="none" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_51eae59a-2459-4c84-907c-cc5edfe5fea7.mp4" poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_0ba6de7c-285d-43dc-b7ab-8c54c73707cb.png" aria-hidden="true"></video>
+        <!-- Foreground Planet Videos (Venus, Earth, Mars) -->
+        <video class="fg-video" data-planet="venus" muted loop playsinline preload="none" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_b211cd74-013b-4dd3-bfd0-64491d8696fa.mp4" poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_cf55d1d8-7b59-4a64-80da-d72052ae974e.png" aria-hidden="true"></video>
+        <video class="fg-video" data-planet="earth" muted loop playsinline preload="none" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_3ffb4889-c520-432d-8458-038009eb40df.mp4" poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_508c64b8-a31e-4290-bdfc-1187df70e0a6.png" aria-hidden="true"></video>
+        <video class="fg-video" data-planet="mars" muted loop playsinline preload="none" data-src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_51eae59a-2459-4c84-907c-cc5edfe5fea7.mp4" poster="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_0ba6de7c-285d-43dc-b7ab-8c54c73707cb.png" aria-hidden="true"></video>
       </div>
       <div class="ui">
         <header class="navbar">
@@ -1204,7 +1252,8 @@
 
         let currentFeatured = null;
 
-        const videos = document.querySelectorAll('.sky video');
+        const fgVideos = document.querySelectorAll('.sky video.fg-video');
+        const galaxyBgVideo = document.getElementById('galaxy-bg-video');
         const planetCanvas = document.getElementById('planet-canvas');
 
         const ORBITAL_TRAJECTORIES = {
@@ -2199,7 +2248,7 @@
 
           /* Handle video clips vs animated 3D planet canvas */
           let isVideoPlanet = false;
-          videos.forEach(v => {
+          fgVideos.forEach(v => {
             if (v.dataset.planet === next) {
               isVideoPlanet = true;
               if (!v.getAttribute('src') && v.dataset.src) {
@@ -2215,6 +2264,14 @@
               v.pause();
             }
           });
+
+          /* Ensure the continuous moving Venus galaxy sky background video is always active and looping */
+          if (galaxyBgVideo) {
+            const bgPromise = galaxyBgVideo.play();
+            if (bgPromise && typeof bgPromise.catch === 'function') {
+              bgPromise.catch(() => {});
+            }
+          }
 
           if (isVideoPlanet) {
             if (planetCanvas) {
@@ -2265,7 +2322,7 @@
         }
 
         function warm(planet) {
-          const v = document.querySelector(`.sky video[data-planet="${planet}"]`);
+          const v = document.querySelector(`.sky video.fg-video[data-planet="${planet}"]`);
           if (v && !v.getAttribute('src') && v.dataset.src) {
             v.preload = 'auto';
             v.src = v.dataset.src;
