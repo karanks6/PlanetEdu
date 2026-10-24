@@ -804,17 +804,17 @@
         opacity:1; visibility:visible;
       }
       .modal-card{
-        background:linear-gradient(145deg, rgba(10, 24, 52, 0.96) 0%, rgba(4, 12, 30, 0.98) 100%);
-        border:calc(1.5 * var(--u)) solid rgba(121, 220, 232, 0.45);
-        box-shadow:0 calc(28 * var(--u)) calc(70 * var(--u)) rgba(0, 0, 0, 0.8),
-                   0 0 calc(36 * var(--u)) rgba(121, 220, 232, 0.16);
+        background:linear-gradient(152deg, rgba(8, 20, 46, 0.97) 0%, rgba(3, 8, 20, 0.99) 100%);
+        border:calc(1.4 * var(--u)) solid var(--dossier-border, rgba(121, 220, 232, 0.40));
+        box-shadow:0 calc(32 * var(--u)) calc(82 * var(--u)) rgba(0, 0, 0, 0.95),
+                   0 0 calc(44 * var(--u)) var(--dossier-glow, rgba(121, 220, 232, 0.20));
         border-radius:calc(24 * var(--u));
-        width:100%; max-width:calc(660 * var(--u));
-        max-height:min(calc(840 * var(--u)), 88vh);
+        width:100%; max-width:calc(760 * var(--u));
+        max-height:min(calc(860 * var(--u)), 90vh);
         overflow-y:auto;
-        padding:calc(32 * var(--u)) calc(36 * var(--u));
+        padding:calc(26 * var(--u)) calc(30 * var(--u));
         transform:scale(.92) translateY(calc(20 * var(--u)));
-        transition:transform .28s cubic-bezier(.4, 0, .2, 1), opacity .24s ease;
+        transition:transform .28s cubic-bezier(.4, 0, .2, 1), opacity .24s ease, border-color .3s ease, box-shadow .3s ease;
         color:#fff;
         will-change:transform, opacity;
       }
@@ -822,33 +822,72 @@
         animation: dossierCardScaleUp 0.62s cubic-bezier(0.16, 1, 0.3, 1) both;
       }
 
-      .modal-header{
-        display:flex; align-items:flex-start; justify-content:space-between;
-        margin-bottom:calc(16 * var(--u));
+      /* Dossier Celestial Header */
+      .dossier-header-flex{
+        display:flex; align-items:center; justify-content:space-between;
+        gap:calc(16 * var(--u)); margin-bottom:calc(12 * var(--u));
       }
-      .modal-backdrop.is-open #dossier-badge{
-        animation: dossierHeaderReveal 0.46s cubic-bezier(0.16, 1, 0.3, 1) 0.08s both;
+      .dossier-header-left{
+        display:flex; align-items:center; gap:calc(18 * var(--u));
+        min-width:0;
       }
-      .modal-backdrop.is-open #dossier-title{
-        animation: dossierHeaderReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+      .dossier-globe-badge{
+        position:relative;
+        width:calc(70 * var(--u)); height:calc(70 * var(--u));
+        border-radius:50%;
+        background:radial-gradient(circle at 35% 30%, rgba(255,255,255,0.22), rgba(6,18,38,0.95) 80%);
+        border:calc(1.5 * var(--u)) solid var(--dossier-accent, rgba(121, 220, 232, 0.65));
+        box-shadow:0 0 calc(22 * var(--u)) var(--dossier-glow, rgba(121, 220, 232, 0.40));
+        display:flex; align-items:center; justify-content:center;
+        flex-shrink:0;
       }
-      .modal-backdrop.is-open #dossier-lede{
-        animation: dossierHeaderReveal 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both;
+      .dossier-globe-ring{
+        position:absolute; inset:calc(-6 * var(--u));
+        border-radius:50%;
+        border:calc(1.2 * var(--u)) dashed var(--dossier-accent, rgba(121, 220, 232, 0.45));
+        animation:avatarOrbitSpin 32s linear infinite;
+        pointer-events:none;
       }
-      .modal-badge{
-        font-size:calc(11.5 * var(--u)); font-weight:600; text-transform:uppercase;
-        letter-spacing:calc(2 * var(--u)); color:var(--cyan);
-        background:rgba(121, 220, 232, 0.12);
-        border:calc(1 * var(--u)) solid rgba(121, 220, 232, 0.32);
+      .dossier-globe-img{
+        width:calc(56 * var(--u)); height:calc(56 * var(--u));
+        border-radius:50%; object-fit:cover;
+        filter:drop-shadow(0 calc(2 * var(--u)) calc(8 * var(--u)) rgba(0,0,0,0.8));
+      }
+      .dossier-meta-col{
+        display:flex; flex-direction:column; gap:calc(3 * var(--u));
+        min-width:0;
+      }
+      .dossier-meta-tags{
+        display:flex; align-items:center; gap:calc(6 * var(--u));
+        flex-wrap:wrap;
+      }
+      .dossier-tag{
+        font-size:calc(10.5 * var(--u)); font-weight:600; text-transform:uppercase;
+        letter-spacing:calc(1.5 * var(--u));
+        padding:calc(2.5 * var(--u)) calc(8 * var(--u));
         border-radius:calc(12 * var(--u));
-        padding:calc(4 * var(--u)) calc(12 * var(--u));
-        display:inline-block;
+        background:rgba(255, 255, 255, 0.06);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.14);
+        color:rgba(255, 255, 255, 0.90);
+        line-height:1;
+      }
+      .dossier-tag-accent{
+        background:rgba(121, 220, 232, 0.14);
+        border-color:var(--dossier-accent, rgba(121, 220, 232, 0.45));
+        color:var(--dossier-accent, #79dce8);
       }
       .modal-title{
-        font-family:var(--font-serif); font-size:calc(46 * var(--u));
+        font-family:var(--font-serif); font-size:calc(38 * var(--u));
         font-weight:400; letter-spacing:calc(2 * var(--u));
-        color:#fff; margin-top:calc(8 * var(--u)); line-height:1;
+        color:#fff; line-height:1; margin:calc(3 * var(--u)) 0;
+        text-shadow:0 calc(2 * var(--u)) calc(12 * var(--u)) rgba(0, 0, 0, 0.7);
       }
+      .dossier-telemetry-subhead{
+        font-size:calc(11.5 * var(--u)); font-weight:500;
+        letter-spacing:calc(1.2 * var(--u)); text-transform:uppercase;
+        color:rgba(255, 255, 255, 0.75);
+      }
+
       .modal-close{
         width:calc(40 * var(--u)); height:calc(40 * var(--u)); border-radius:50%;
         background:rgba(255, 255, 255, 0.08); border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.18);
@@ -857,115 +896,282 @@
         flex:none; padding:0;
       }
       .modal-close:hover{
-        background:rgba(121, 220, 232, 0.22); border-color:var(--cyan);
+        background:rgba(121, 220, 232, 0.22); border-color:var(--dossier-accent, var(--cyan));
         transform:scale(1.08);
-        box-shadow:0 0 calc(12 * var(--u)) rgba(121, 220, 232, 0.4);
+        box-shadow:0 0 calc(12 * var(--u)) var(--dossier-glow, rgba(121, 220, 232, 0.4));
       }
       .modal-close svg{width:calc(20 * var(--u)); height:calc(20 * var(--u)); stroke:currentColor}
-      .modal-lede{
-        font-size:calc(15.5 * var(--u)); line-height:calc(24 * var(--u));
-        color:rgba(255, 255, 255, 0.88); margin-bottom:calc(22 * var(--u));
+
+      /* Quick Planet Cycle Nav Bar */
+      .dossier-nav-bar{
+        display:flex; align-items:center; justify-content:space-between; gap:calc(12 * var(--u));
+        padding:calc(8 * var(--u)) calc(14 * var(--u));
+        background:rgba(255, 255, 255, 0.03);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.08);
+        border-radius:calc(16 * var(--u));
+        margin:calc(14 * var(--u)) 0 calc(14 * var(--u));
+      }
+      .dossier-nav-btn{
+        display:inline-flex; align-items:center; gap:calc(6 * var(--u));
+        font-family:var(--font-body); font-size:calc(11.5 * var(--u));
+        font-weight:600; text-transform:uppercase; letter-spacing:calc(1 * var(--u));
+        color:rgba(255, 255, 255, 0.85);
+        background:rgba(255, 255, 255, 0.06);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.12);
+        border-radius:calc(12 * var(--u));
+        padding:calc(5 * var(--u)) calc(12 * var(--u));
+        cursor:pointer;
+        transition:background .2s, border-color .2s, color .2s, transform .2s;
+      }
+      .dossier-nav-btn:hover{
+        background:rgba(121, 220, 232, 0.18);
+        border-color:var(--dossier-accent, var(--cyan));
+        color:#fff;
+        transform:scale(1.03);
+      }
+      .dossier-nav-btn svg{width:calc(12 * var(--u)); height:calc(12 * var(--u)); stroke-width:2.5}
+      .dossier-planet-dots{
+        display:flex; align-items:center; gap:calc(8 * var(--u));
+      }
+      .dossier-dot{
+        width:calc(10 * var(--u)); height:calc(10 * var(--u)); border-radius:50%;
+        background:rgba(255, 255, 255, 0.25);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.35);
+        cursor:pointer; padding:0;
+        transition:transform .2s, background .2s, box-shadow .2s;
+      }
+      .dossier-dot:hover{
+        transform:scale(1.35);
+        background:var(--dossier-accent, #fff);
+      }
+      .dossier-dot.is-active{
+        transform:scale(1.4);
+        background:var(--dossier-accent, #79dce8);
+        border-color:#fff;
+        box-shadow:0 0 calc(10 * var(--u)) var(--dossier-accent, #79dce8);
       }
 
-      /* Stats Grid & Staggered Cascade Entrance */
+      /* Segmented Dossier Tabs */
+      .dossier-tabs{
+        display:flex; align-items:center; gap:calc(6 * var(--u));
+        padding:calc(4 * var(--u));
+        background:rgba(3, 9, 22, 0.7);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.10);
+        border-radius:calc(14 * var(--u));
+        margin-bottom:calc(16 * var(--u));
+      }
+      .dossier-tab{
+        flex:1; padding:calc(8 * var(--u)) calc(10 * var(--u));
+        font-family:var(--font-body); font-size:calc(12 * var(--u));
+        font-weight:600; letter-spacing:calc(0.8 * var(--u));
+        text-transform:uppercase; color:rgba(255, 255, 255, 0.65);
+        background:none; border:none; border-radius:calc(10 * var(--u));
+        cursor:pointer;
+        transition:background .2s, color .2s, transform .2s, box-shadow .2s;
+        text-align:center;
+      }
+      .dossier-tab:hover{
+        color:#fff; background:rgba(255, 255, 255, 0.05);
+      }
+      .dossier-tab.is-active{
+        color:#fff;
+        background:rgba(121, 220, 232, 0.18);
+        border:calc(1 * var(--u)) solid var(--dossier-accent, rgba(121, 220, 232, 0.45));
+        box-shadow:0 calc(2 * var(--u)) calc(10 * var(--u)) rgba(0, 0, 0, 0.4),
+                   inset 0 0 calc(10 * var(--u)) var(--dossier-glow, rgba(121, 220, 232, 0.15));
+      }
+
+      /* Dossier Panels */
+      .dossier-panel{
+        display:none;
+      }
+      .dossier-panel.is-active{
+        display:block;
+        animation:ent-fade 0.32s ease both;
+      }
+
+      .modal-lede{
+        font-size:calc(14.5 * var(--u)); line-height:calc(23 * var(--u));
+        color:rgba(255, 255, 255, 0.88); margin-bottom:calc(18 * var(--u));
+      }
+
+      /* Stats Grid (3 Columns) */
       .stats-grid{
-        display:grid; grid-template-columns:repeat(2, 1fr);
-        gap:calc(12 * var(--u)); margin-bottom:calc(24 * var(--u));
+        display:grid; grid-template-columns:repeat(3, 1fr);
+        gap:calc(10 * var(--u)); margin-bottom:calc(18 * var(--u));
+      }
+      @media (max-width: 650px) {
+        .stats-grid { grid-template-columns: repeat(2, 1fr); }
       }
       .stat-item{
-        background:rgba(255, 255, 255, 0.04);
+        background:rgba(255, 255, 255, 0.035);
         border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.09);
         border-radius:calc(14 * var(--u));
-        padding:calc(13 * var(--u)) calc(16 * var(--u));
-        position:relative;
-        overflow:hidden;
+        padding:calc(11 * var(--u)) calc(14 * var(--u));
+        position:relative; overflow:hidden;
         transition:transform .24s cubic-bezier(.16, 1, .3, 1), border-color .24s, background .24s, box-shadow .24s;
       }
       .stat-item::before{
-        content:'';
-        position:absolute; inset:0;
-        background:radial-gradient(circle at 12% 18%, rgba(121, 220, 232, 0.14), transparent 72%);
-        opacity:0;
-        transition:opacity .24s ease;
-        pointer-events:none;
+        content:''; position:absolute; inset:0;
+        background:radial-gradient(circle at 12% 18%, var(--dossier-glow, rgba(121, 220, 232, 0.14)), transparent 72%);
+        opacity:0; transition:opacity .24s ease; pointer-events:none;
       }
       .stat-item:hover{
         background:rgba(121, 220, 232, 0.08);
-        border-color:rgba(121, 220, 232, 0.38);
+        border-color:var(--dossier-accent, rgba(121, 220, 232, 0.38));
         transform:translateY(calc(-2 * var(--u)));
-        box-shadow:0 calc(8 * var(--u)) calc(20 * var(--u)) rgba(0, 0, 0, 0.45),
-                   0 0 calc(16 * var(--u)) rgba(121, 220, 232, 0.20);
+        box-shadow:0 calc(6 * var(--u)) calc(16 * var(--u)) rgba(0, 0, 0, 0.45),
+                   0 0 calc(14 * var(--u)) var(--dossier-glow, rgba(121, 220, 232, 0.20));
       }
       .stat-item:hover::before{
         opacity:1;
       }
       .stat-label{
-        display:block; font-size:calc(11.5 * var(--u));
-        color:rgba(255, 255, 255, 0.58); text-transform:uppercase;
+        display:block; font-size:calc(10.5 * var(--u));
+        color:rgba(255, 255, 255, 0.55); text-transform:uppercase;
         letter-spacing:calc(1 * var(--u)); margin-bottom:calc(4 * var(--u));
       }
       .stat-val{
-        font-size:calc(16 * var(--u)); font-weight:600; color:#fff;
+        font-size:calc(15 * var(--u)); font-weight:600; color:#fff;
+        font-variant-numeric:tabular-nums;
       }
 
-      /* Staggered Delay Cascade for each Stats Item */
-      .modal-backdrop.is-open .stats-grid .stat-item:nth-child(1){
-        animation: statItemCascade 0.54s cubic-bezier(0.16, 1, 0.3, 1) 0.22s both;
+      /* Solar System Orbit Mini-Spectrum Map */
+      .solar-spectrum-box{
+        background:rgba(255, 255, 255, 0.03);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.08);
+        border-radius:calc(14 * var(--u));
+        padding:calc(14 * var(--u)) calc(18 * var(--u));
+        margin-bottom:calc(12 * var(--u));
       }
-      .modal-backdrop.is-open .stats-grid .stat-item:nth-child(2){
-        animation: statItemCascade 0.54s cubic-bezier(0.16, 1, 0.3, 1) 0.28s both;
+      .solar-spectrum-header{
+        display:flex; justify-content:space-between; align-items:center;
+        font-size:calc(11 * var(--u)); text-transform:uppercase; letter-spacing:calc(1.2 * var(--u));
+        color:var(--dossier-accent, var(--cyan)); font-weight:600;
+        margin-bottom:calc(10 * var(--u));
       }
-      .modal-backdrop.is-open .stats-grid .stat-item:nth-child(3){
-        animation: statItemCascade 0.54s cubic-bezier(0.16, 1, 0.3, 1) 0.34s both;
+      .solar-spectrum-track{
+        position:relative; height:calc(8 * var(--u)); border-radius:calc(4 * var(--u));
+        background:linear-gradient(90deg, #ffc83b 0%, #1e4575 25%, #0e274a 60%, #06132b 100%);
+        margin:calc(14 * var(--u)) calc(10 * var(--u)) calc(20 * var(--u));
       }
-      .modal-backdrop.is-open .stats-grid .stat-item:nth-child(4){
-        animation: statItemCascade 0.54s cubic-bezier(0.16, 1, 0.3, 1) 0.40s both;
+      .spectrum-sun-node{
+        position:absolute; left:0; top:50%; transform:translate(-50%, -50%);
+        width:calc(16 * var(--u)); height:calc(16 * var(--u)); border-radius:50%;
+        background:#ffdd53; box-shadow:0 0 calc(12 * var(--u)) #ffaa00;
       }
-      .modal-backdrop.is-open .stats-grid .stat-item:nth-child(5){
-        animation: statItemCascade 0.54s cubic-bezier(0.16, 1, 0.3, 1) 0.46s both;
+      .spectrum-marker{
+        position:absolute; top:50%; transform:translate(-50%, -50%);
+        width:calc(8 * var(--u)); height:calc(8 * var(--u)); border-radius:50%;
+        background:rgba(255, 255, 255, 0.35); transition:all .25s ease;
       }
-      .modal-backdrop.is-open .stats-grid .stat-item:nth-child(6){
-        animation: statItemCascade 0.54s cubic-bezier(0.16, 1, 0.3, 1) 0.52s both;
+      .spectrum-marker.is-active{
+        width:calc(16 * var(--u)); height:calc(16 * var(--u));
+        background:var(--dossier-accent, #79dce8);
+        border:calc(2 * var(--u)) solid #fff;
+        box-shadow:0 0 calc(14 * var(--u)) var(--dossier-accent, #79dce8);
+        z-index:2;
+      }
+      .spectrum-labels-row{
+        display:flex; justify-content:space-between; font-size:calc(10 * var(--u));
+        color:rgba(255, 255, 255, 0.50); text-transform:uppercase; letter-spacing:calc(1 * var(--u));
+      }
+
+      /* Atmosphere & Interior Panel */
+      .atmo-section-card{
+        background:rgba(255, 255, 255, 0.035);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.09);
+        border-radius:calc(16 * var(--u));
+        padding:calc(14 * var(--u)) calc(18 * var(--u));
+        margin-bottom:calc(14 * var(--u));
+      }
+      .atmo-card-heading{
+        font-size:calc(11.5 * var(--u)); text-transform:uppercase;
+        letter-spacing:calc(1.4 * var(--u)); color:var(--dossier-accent, var(--cyan));
+        font-weight:600; margin-bottom:calc(10 * var(--u));
+      }
+      .atmo-meter-bar{
+        height:calc(12 * var(--u)); border-radius:calc(6 * var(--u));
+        display:flex; overflow:hidden; background:rgba(255, 255, 255, 0.06);
+        margin-bottom:calc(12 * var(--u));
+      }
+      .atmo-meter-seg{
+        height:100%; transition:width .4s ease;
+      }
+      .atmo-gases-legend{
+        display:flex; flex-wrap:wrap; gap:calc(8 * var(--u));
+      }
+      .atmo-gas-badge{
+        display:inline-flex; align-items:center; gap:calc(6 * var(--u));
+        font-size:calc(11.5 * var(--u)); font-weight:500;
+        padding:calc(4 * var(--u)) calc(10 * var(--u));
+        background:rgba(255, 255, 255, 0.04);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.10);
+        border-radius:calc(10 * var(--u));
+        color:rgba(255, 255, 255, 0.92);
+      }
+      .atmo-gas-dot{
+        width:calc(7 * var(--u)); height:calc(7 * var(--u)); border-radius:50%;
+      }
+      .atmo-prose{
+        font-size:calc(13.5 * var(--u)); line-height:1.55;
+        color:rgba(255, 255, 255, 0.88);
+      }
+
+      /* Missions & Intelligence Cards (Zero-Thick-Border Discipline) */
+      .missions-ribbon{
+        margin-bottom:calc(16 * var(--u));
+        padding:calc(12 * var(--u)) calc(16 * var(--u));
+        background:rgba(255, 255, 255, 0.03);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.08);
+        border-radius:calc(14 * var(--u));
+      }
+      .missions-title{
+        font-size:calc(11 * var(--u)); text-transform:uppercase;
+        letter-spacing:calc(1.4 * var(--u)); color:var(--dossier-accent, var(--cyan));
+        font-weight:600; margin-bottom:calc(6 * var(--u));
+      }
+      .missions-list{
+        font-size:calc(13.5 * var(--u)); color:rgba(255, 255, 255, 0.88);
+        line-height:1.5;
       }
 
       .facts-heading{
-        font-size:calc(13.5 * var(--u)); text-transform:uppercase;
-        letter-spacing:calc(1.6 * var(--u)); color:var(--cyan);
-        margin-bottom:calc(14 * var(--u)); font-weight:600;
+        font-size:calc(13 * var(--u)); text-transform:uppercase;
+        letter-spacing:calc(1.5 * var(--u)); color:var(--dossier-accent, var(--cyan));
+        margin-bottom:calc(12 * var(--u)); font-weight:600;
       }
-      .modal-backdrop.is-open .facts-heading{
-        animation: dossierHeaderReveal 0.50s cubic-bezier(0.16, 1, 0.3, 1) 0.56s both;
+      .facts-list{
+        display:flex; flex-direction:column; gap:calc(10 * var(--u));
       }
       .fact-card{
-        background:rgba(121, 220, 232, 0.05);
-        border-left:calc(3.5 * var(--u)) solid var(--cyan);
-        border-radius:0 calc(12 * var(--u)) calc(12 * var(--u)) 0;
-        padding:calc(12 * var(--u)) calc(16 * var(--u));
-        margin-bottom:calc(10 * var(--u));
-        transition:transform .24s ease, background .24s ease;
+        background:rgba(255, 255, 255, 0.035);
+        border:calc(1 * var(--u)) solid rgba(255, 255, 255, 0.10);
+        border-radius:calc(14 * var(--u));
+        padding:calc(14 * var(--u)) calc(18 * var(--u));
+        transition:transform .24s cubic-bezier(.16, 1, .3, 1), background .24s, border-color .24s, box-shadow .24s;
       }
       .fact-card:hover{
-        background:rgba(121, 220, 232, 0.09);
+        background:rgba(121, 220, 232, 0.08);
+        border-color:var(--dossier-accent, rgba(121, 220, 232, 0.40));
         transform:translateX(calc(3 * var(--u)));
+        box-shadow:0 calc(4 * var(--u)) calc(14 * var(--u)) rgba(0, 0, 0, 0.4);
       }
+      .fact-header-row{
+        display:flex; align-items:center; gap:calc(8 * var(--u));
+        margin-bottom:calc(4 * var(--u));
+      }
+      .fact-icon{
+        color:var(--dossier-accent, var(--cyan));
+        flex-shrink:0; display:flex; align-items:center;
+      }
+      .fact-icon svg{width:calc(16 * var(--u)); height:calc(16 * var(--u)); stroke-width:2.2}
       .fact-title{
         font-weight:600; font-size:calc(14.5 * var(--u)); color:#fff;
-        margin-bottom:calc(4 * var(--u));
       }
       .fact-detail{
         font-size:calc(13.5 * var(--u)); color:rgba(255, 255, 255, 0.86);
-        line-height:1.45;
-      }
-
-      /* Staggered Delay Cascade for Fact Cards */
-      .modal-backdrop.is-open .facts-list .fact-card:nth-child(1){
-        animation: factCardCascade 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.60s both;
-      }
-      .modal-backdrop.is-open .facts-list .fact-card:nth-child(2){
-        animation: factCardCascade 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.68s both;
-      }
-      .modal-backdrop.is-open .facts-list .fact-card:nth-child(3){
-        animation: factCardCascade 0.52s cubic-bezier(0.16, 1, 0.3, 1) 0.76s both;
+        line-height:1.5; padding-left:calc(24 * var(--u));
       }
 
       /* Developer modal staggered cascade entrance */
@@ -1256,11 +1462,23 @@
 
       <!-- Planetary Dossier Modal -->
       <div class="modal-backdrop" id="dossier-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="dossier-title">
-        <div class="modal-card">
-          <div class="modal-header">
-            <div>
-              <span class="modal-badge" id="dossier-badge">TERRESTRIAL PLANET</span>
-              <h2 class="modal-title" id="dossier-title">MERCURY</h2>
+        <div class="modal-card dossier-modal-card">
+          <!-- Celestial Header -->
+          <div class="dossier-header-flex">
+            <div class="dossier-header-left">
+              <div class="dossier-globe-badge" id="dossier-globe-badge" aria-hidden="true">
+                <div class="dossier-globe-ring"></div>
+                <img id="dossier-globe-img" class="dossier-globe-img" src="" alt="">
+              </div>
+              <div class="dossier-meta-col">
+                <div class="dossier-meta-tags">
+                  <span class="dossier-tag dossier-tag-accent" id="dossier-badge">TERRESTRIAL PLANET</span>
+                  <span class="dossier-tag" id="dossier-order-tag">1ST PLANET</span>
+                  <span class="dossier-tag" id="dossier-diameter-tag">DIAMETER: 4,879 KM</span>
+                </div>
+                <h2 class="modal-title" id="dossier-title">MERCURY</h2>
+                <div class="dossier-telemetry-subhead" id="dossier-telemetry-subhead">ORBIT: 0.39 AU · VELOCITY: 47.4 KM/S · INCLINATION: 7.0°</div>
+              </div>
             </div>
             <button class="modal-close" id="modal-close-btn" type="button" aria-label="Close planet dossier">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -1269,36 +1487,118 @@
               </svg>
             </button>
           </div>
-          <p class="modal-lede" id="dossier-lede"></p>
-          <div class="stats-grid">
-            <div class="stat-item">
-              <span class="stat-label">Distance from Sun</span>
-              <span class="stat-val" id="dossier-distance"></span>
+
+          <!-- Quick Planet Cycle Nav Bar -->
+          <div class="dossier-nav-bar" aria-label="Planet navigation">
+            <button class="dossier-nav-btn" id="dossier-prev-btn" type="button" aria-label="Previous Planet">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+              <span id="dossier-prev-label">Prev: Neptune</span>
+            </button>
+            <div class="dossier-planet-dots" id="dossier-planet-dots" role="tablist" aria-label="Quick planet selector"></div>
+            <button class="dossier-nav-btn" id="dossier-next-btn" type="button" aria-label="Next Planet">
+              <span id="dossier-next-label">Next: Venus</span>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Segmented Dossier Tabs -->
+          <div class="dossier-tabs" role="tablist">
+            <button class="dossier-tab is-active" id="tab-btn-overview" role="tab" aria-selected="true" aria-controls="panel-overview" data-target="panel-overview">Telemetry & Overview</button>
+            <button class="dossier-tab" id="tab-btn-atmo" role="tab" aria-selected="false" aria-controls="panel-atmo" data-target="panel-atmo">Atmosphere & Interior</button>
+            <button class="dossier-tab" id="tab-btn-facts" role="tab" aria-selected="false" aria-controls="panel-facts" data-target="panel-facts">Missions & Intelligence</button>
+          </div>
+
+          <!-- Tab Panel 1: Telemetry & Overview -->
+          <div class="dossier-panel is-active" id="panel-overview" role="tabpanel" aria-labelledby="tab-btn-overview">
+            <p class="modal-lede" id="dossier-lede"></p>
+            <div class="stats-grid">
+              <div class="stat-item">
+                <span class="stat-label">Distance from Sun</span>
+                <span class="stat-val" id="dossier-distance"></span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Year / Orbital Period</span>
+                <span class="stat-val" id="dossier-orbit"></span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Solar Day Length</span>
+                <span class="stat-val" id="dossier-day"></span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Mean Temperature</span>
+                <span class="stat-val" id="dossier-temp"></span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Confirmed Moons</span>
+                <span class="stat-val" id="dossier-moons"></span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Surface Gravity</span>
+                <span class="stat-val" id="dossier-gravity"></span>
+              </div>
             </div>
-            <div class="stat-item">
-              <span class="stat-label">Year Length</span>
-              <span class="stat-val" id="dossier-orbit"></span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Day Length</span>
-              <span class="stat-val" id="dossier-day"></span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Surface Temperature</span>
-              <span class="stat-val" id="dossier-temp"></span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Known Moons</span>
-              <span class="stat-val" id="dossier-moons"></span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-label">Surface Gravity</span>
-              <span class="stat-val" id="dossier-gravity"></span>
+
+            <!-- Solar System Distance Spectrum -->
+            <div class="solar-spectrum-box">
+              <div class="solar-spectrum-header">
+                <span>Solar System Orbital Radius Spectrum</span>
+                <span id="spectrum-current-au">0.39 AU</span>
+              </div>
+              <div class="solar-spectrum-track" id="solar-spectrum-track" aria-hidden="true">
+                <div class="spectrum-sun-node" title="The Sun"></div>
+                <div class="spectrum-marker" data-index="0" style="left: 6%;" title="Mercury"></div>
+                <div class="spectrum-marker" data-index="1" style="left: 14%;" title="Venus"></div>
+                <div class="spectrum-marker" data-index="2" style="left: 22%;" title="Earth"></div>
+                <div class="spectrum-marker" data-index="3" style="left: 32%;" title="Mars"></div>
+                <div class="spectrum-marker" data-index="4" style="left: 54%;" title="Jupiter"></div>
+                <div class="spectrum-marker" data-index="5" style="left: 70%;" title="Saturn"></div>
+                <div class="spectrum-marker" data-index="6" style="left: 84%;" title="Uranus"></div>
+                <div class="spectrum-marker" data-index="7" style="left: 96%;" title="Neptune"></div>
+              </div>
+              <div class="spectrum-labels-row" aria-hidden="true">
+                <span>☀️ Sol</span>
+                <span>Inner Terrestrials</span>
+                <span>Asteroid Belt</span>
+                <span>Gas & Ice Giants</span>
+                <span>Kuiper Belt 🌌</span>
+              </div>
             </div>
           </div>
-          <div class="facts-section">
-            <h3 class="facts-heading">Planetary Intelligence & Scientific Facts</h3>
-            <div class="facts-list" id="dossier-facts"></div>
+
+          <!-- Tab Panel 2: Atmosphere & Interior -->
+          <div class="dossier-panel" id="panel-atmo" role="tabpanel" aria-labelledby="tab-btn-atmo">
+            <div class="atmo-section-card">
+              <div class="atmo-card-heading">Atmospheric Composition & Trace Gases</div>
+              <div class="atmo-meter-bar" id="atmo-meter-bar" aria-label="Atmospheric composition bar"></div>
+              <div class="atmo-gases-legend" id="atmo-gases-legend"></div>
+            </div>
+
+            <div class="atmo-section-card">
+              <div class="atmo-card-heading">Surface Pressure & Planetary Dynamics</div>
+              <p class="atmo-prose" id="atmo-pressure-text"></p>
+            </div>
+
+            <div class="atmo-section-card">
+              <div class="atmo-card-heading">Geological & Core Interior Architecture</div>
+              <p class="atmo-prose" id="atmo-interior-text"></p>
+            </div>
+          </div>
+
+          <!-- Tab Panel 3: Missions & Intelligence -->
+          <div class="dossier-panel" id="panel-facts" role="tabpanel" aria-labelledby="tab-btn-facts">
+            <div class="missions-ribbon">
+              <div class="missions-title">Spacecraft Exploration Milestones</div>
+              <div class="missions-list" id="dossier-missions"></div>
+            </div>
+
+            <div class="facts-section">
+              <h3 class="facts-heading">Planetary Intelligence & Scientific Facts</h3>
+              <div class="facts-list" id="dossier-facts"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1465,21 +1765,38 @@
 
         const PLANETS = {
           mercury: {
+            id: 'mercury',
+            orderNum: 1,
+            orderTitle: '1st Planet from Sun',
             name: 'MERCURY',
             type: 'Terrestrial Planet',
+            diameter: '4,879 KM (0.38 Earths)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 0.39 AU · ORBITAL VELOCITY: 47.4 KM/S · INCLINATION: 7.0°',
             lede: "The smallest planet in our solar system and closest to the Sun. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "Closest to the Sun and the smallest terrestrial world in our solar system, Mercury endures violent thermal swings across its heavily cratered surface. Lacking a substantial atmosphere to buffer temperature, its days reach searing 430°C while its nights plummet to -180°C. An unusually colossal iron-nickel core accounts for nearly 85% of its planetary radius.",
             still: "https://upload.wikimedia.org/wikipedia/commons/3/30/Mercury_in_color_-_Prockter07_centered.jpg",
             texture: "https://upload.wikimedia.org/wikipedia/commons/9/92/Solarsystemscope_texture_2k_mercury.jpg",
-            atmoColor: "rgba(180, 215, 240, 0.55)",
-            atmoGlow: "rgba(140, 190, 230, 0.3)",
+            cutout: "https://upload.wikimedia.org/wikipedia/commons/b/b9/3D_Mercury.png",
+            atmoColor: "rgba(180, 215, 240, 0.65)",
+            atmoGlow: "rgba(140, 190, 230, 0.35)",
             stats: {
               distance: "57.9M km (0.39 AU)",
               orbitPeriod: "88 Earth Days",
               dayLength: "58.6 Earth Days",
               temperature: "-180°C to 430°C",
-              moons: "0",
+              moons: "0 Confirmed",
               gravity: "3.7 m/s² (0.38g)"
             },
+            pressureText: "Surface Pressure: < 10⁻¹⁴ bar (Ultra-tenuous exosphere; surface is directly exposed to solar wind and micrometeorite bombardment).",
+            interiorText: "Enormous metallic iron core (~2,000 km radius, occupying ~85% of planetary radius) surrounded by a thin silicate mantle (~400 km) and fractured ancient crust.",
+            atmosphereGases: [
+              { name: 'Oxygen (O₂)', pct: '42.0%', color: '#79dce8' },
+              { name: 'Sodium (Na)', pct: '29.0%', color: '#ffb347' },
+              { name: 'Hydrogen (H₂)', pct: '22.0%', color: '#88aaff' },
+              { name: 'Helium (He)', pct: '6.0%', color: '#d8b4fe' },
+              { name: 'Potassium (K)', pct: '1.0%', color: '#f472b6' }
+            ],
+            missions: "Mariner 10 (1974 flybys, first close-up imagery) · MESSENGER (2011–2015 orbital mapping, revealed water ice in polar shadow craters) · BepiColombo (ESA/JAXA joint mission, arriving in 2025/2026).",
             facts: [
               { label: "Extreme Temperatures", detail: "With almost no atmosphere to retain heat, surface temperatures swing by over 600°C between day and night." },
               { label: "Colossal Iron Core", detail: "Mercury boasts a gigantic metallic core occupying nearly 85% of its planetary radius." },
@@ -1487,22 +1804,38 @@
             ]
           },
           venus: {
+            id: 'venus',
+            orderNum: 2,
+            orderTitle: '2nd Planet from Sun',
             name: 'VENUS',
             type: 'Terrestrial Planet',
+            diameter: '12,104 KM (0.95 Earths)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 0.72 AU · ORBITAL VELOCITY: 35.0 KM/S · INCLINATION: 3.4°',
             lede: "The hottest world in our solar system, wrapped in clouds of sulfuric acid. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "Wrapped in impenetrable clouds of sulfuric acid, Venus is the hottest world in the solar system due to an extreme runaway greenhouse effect. Surface temperatures hover around 465°C—hot enough to melt lead. It exhibits retrograde axial spin, meaning the Sun rises in the west, and its day is longer than its year.",
             still: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_cf55d1d8-7b59-4a64-80da-d72052ae974e.png",
             texture: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_cf55d1d8-7b59-4a64-80da-d72052ae974e.png",
             clip: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_b211cd74-013b-4dd3-bfd0-64491d8696fa.mp4",
-            atmoColor: "rgba(240, 195, 120, 0.65)",
-            atmoGlow: "rgba(220, 170, 80, 0.35)",
+            cutout: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202012_640b239a-d08a-4200-adb2-741bbe129ac8.png",
+            atmoColor: "rgba(240, 195, 120, 0.70)",
+            atmoGlow: "rgba(220, 170, 80, 0.40)",
             stats: {
               distance: "108.2M km (0.72 AU)",
               orbitPeriod: "225 Earth Days",
               dayLength: "243 Earth Days",
               temperature: "465°C average",
-              moons: "0",
+              moons: "0 Confirmed",
               gravity: "8.87 m/s² (0.90g)"
             },
+            pressureText: "Surface Pressure: 92 bar (~92 atmospheres, equivalent to 900 meters under Earth's ocean, crushing unmanned landers within hours).",
+            interiorText: "Metallic iron-nickel core (~3,200 km radius), rocky silicate mantle, and basaltic volcanic crust exhibiting thousands of active shield volcanoes and vast lava plains.",
+            atmosphereGases: [
+              { name: 'Carbon Dioxide (CO₂)', pct: '96.5%', color: '#f59e0b' },
+              { name: 'Nitrogen (N₂)', pct: '3.5%', color: '#60a5fa' },
+              { name: 'Sulfur Dioxide (SO₂)', pct: '0.015%', color: '#facc15' },
+              { name: 'Water Vapor (H₂O)', pct: '0.002%', color: '#38bdf8' }
+            ],
+            missions: "Venera Program (Soviet landers, first surface photos) · Magellan (NASA radar surface mapping) · Akatsuki (JAXA climate orbiter) · Upcoming: DAVINCI & VERITAS (NASA) and EnVision (ESA).",
             facts: [
               { label: "Runaway Greenhouse", detail: "A dense carbon dioxide atmosphere generates crushing pressures 92 times greater than Earth's sea level." },
               { label: "Retrograde Spin", detail: "Venus rotates backward compared to most planets—the Sun rises in the west and sets in the east." },
@@ -1510,14 +1843,21 @@
             ]
           },
           earth: {
+            id: 'earth',
+            orderNum: 3,
+            orderTitle: '3rd Planet from Sun',
             name: 'EARTH',
             type: 'Terrestrial Planet',
+            diameter: '12,742 KM (1.00 Earth)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 1.00 AU · ORBITAL VELOCITY: 29.8 KM/S · INCLINATION: 0.0°',
             lede: "Learn more about the fascinating details that we call our home, Planet Earth. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "The only known world in the cosmos harboring life, Earth orbits within the circumstellar habitable zone with 71% of its crust submerged beneath oceans of liquid water. Its dynamic geological engine of active plate tectonics and a molten iron core dynamo sustains a life-protecting geomagnetic envelope deflecting cosmic radiation.",
             still: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_508c64b8-a31e-4290-bdfc-1187df70e0a6.png",
             texture: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_508c64b8-a31e-4290-bdfc-1187df70e0a6.png",
             clip: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_3ffb4889-c520-432d-8458-038009eb40df.mp4",
-            atmoColor: "rgba(100, 195, 255, 0.7)",
-            atmoGlow: "rgba(70, 160, 255, 0.4)",
+            cutout: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202005_3346cc4d-ec3b-44ab-825c-b18e49f5021a.png",
+            atmoColor: "rgba(100, 195, 255, 0.75)",
+            atmoGlow: "rgba(70, 160, 255, 0.45)",
             stats: {
               distance: "149.6M km (1.00 AU)",
               orbitPeriod: "365.25 Days",
@@ -1526,6 +1866,15 @@
               moons: "1 (The Moon)",
               gravity: "9.81 m/s² (1.00g)"
             },
+            pressureText: "Surface Pressure: 1.013 bar (101.3 kPa at sea level; ideal thermodynamic boundary conditions for liquid water equilibrium).",
+            interiorText: "Solid iron-nickel inner core (~1,220 km radius), liquid iron-nickel outer core (~2,260 km, generating geomagnetism), convective silicate mantle (~2,900 km), and fractured tectonic lithosphere.",
+            atmosphereGases: [
+              { name: 'Nitrogen (N₂)', pct: '78.08%', color: '#3b82f6' },
+              { name: 'Oxygen (O₂)', pct: '20.95%', color: '#06b6d4' },
+              { name: 'Argon (Ar)', pct: '0.93%', color: '#a855f7' },
+              { name: 'Carbon Dioxide (CO₂)', pct: '0.04%', color: '#eab308' }
+            ],
+            missions: "Continuous orbital environmental monitoring: Landsat Constellation, Terra, Aqua, Sentinel (ESA), and international human presence on the International Space Station.",
             facts: [
               { label: "Liquid Oceans", detail: "The only known world in the cosmos harboring stable oceans of liquid water across 71% of its crust." },
               { label: "Magnetic Shield", detail: "A churning dynamo core produces a magnetosphere deflecting destructive cosmic rays and solar winds." },
@@ -1533,22 +1882,38 @@
             ]
           },
           mars: {
+            id: 'mars',
+            orderNum: 4,
+            orderTitle: '4th Planet from Sun',
             name: 'MARS',
             type: 'Terrestrial Planet',
+            diameter: '6,779 KM (0.53 Earths)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 1.52 AU · ORBITAL VELOCITY: 24.1 KM/S · INCLINATION: 1.9°',
             lede: "The rust-red desert world, home to the tallest volcano we know of. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "A frigid hyper-arid desert world known as the Red Planet due to oxidized iron dust coating its surface. Mars preserves dramatic geological monuments: Olympus Mons, towering 21.9 km high, and Valles Marineris canyon spanning 4,000 km. Abundant mineralogical evidence and subsurface radar echoes confirm ancient rivers and massive present-day subterranean water-ice sheets.",
             still: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_0ba6de7c-285d-43dc-b7ab-8c54c73707cb.png",
             texture: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202133_0ba6de7c-285d-43dc-b7ab-8c54c73707cb.png",
             clip: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202422_51eae59a-2459-4c84-907c-cc5edfe5fea7.mp4",
-            atmoColor: "rgba(240, 120, 70, 0.65)",
-            atmoGlow: "rgba(210, 80, 40, 0.35)",
+            cutout: "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260827_202018_3d559490-f613-4ed7-a3bb-3b7e9fc90fb8.png",
+            atmoColor: "rgba(240, 120, 70, 0.70)",
+            atmoGlow: "rgba(210, 80, 40, 0.40)",
             stats: {
               distance: "227.9M km (1.52 AU)",
               orbitPeriod: "687 Earth Days",
-              dayLength: "24h 37m",
+              dayLength: "24h 37m (1 Sol)",
               temperature: "-125°C to 20°C",
               moons: "2 (Phobos & Deimos)",
               gravity: "3.71 m/s² (0.38g)"
             },
+            pressureText: "Surface Pressure: 0.006 bar (0.6% of Earth; liquid water evaporates almost instantly, requiring pressurized habitats for exploration).",
+            interiorText: "Partially liquid iron-nickel-sulfur core (~1,830 km radius), silicate mantle with stagnant-lid geology, and thick basaltic crust enriched with iron oxide regolith.",
+            atmosphereGases: [
+              { name: 'Carbon Dioxide (CO₂)', pct: '95.1%', color: '#f97316' },
+              { name: 'Nitrogen (N₂)', pct: '2.6%', color: '#3b82f6' },
+              { name: 'Argon (Ar)', pct: '1.9%', color: '#a855f7' },
+              { name: 'Oxygen (O₂)', pct: '0.16%', color: '#06b6d4' }
+            ],
+            missions: "Viking Landers (1976) · Mars Pathfinder & Sojourner (1997) · Spirit & Opportunity (2004) · Curiosity (2012) · Perseverance & Ingenuity Helicopter (2021–Present) · Hope (UAE) · Tianwen-1 (China).",
             facts: [
               { label: "Olympus Mons", detail: "A giant shield volcano rising 21.9 km into the thin Martian sky—almost three times Everest's elevation." },
               { label: "Valles Marineris", detail: "A colossal canyon system stretching over 4,000 km, gouging fractures up to 7 km deep across the planet." },
@@ -1556,13 +1921,20 @@
             ]
           },
           jupiter: {
+            id: 'jupiter',
+            orderNum: 5,
+            orderTitle: '5th Planet from Sun',
             name: 'JUPITER',
             type: 'Gas Giant',
+            diameter: '139,820 KM (10.97 Earths)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 5.20 AU · ORBITAL VELOCITY: 13.1 KM/S · INCLINATION: 1.3°',
             lede: "The king of planets, containing twice the mass of all other planets combined. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "The supreme colossus of the solar system, holding 2.5 times the mass of all other planets combined. Rotating completely in less than 10 hours, its rapid spin shears ammonia clouds into contrasting equatorial belts and ferocious anticyclonic storms, headlined by the three-century-old Great Red Spot. It presides over a mini-solar system of 95 confirmed moons.",
             still: "https://upload.wikimedia.org/wikipedia/commons/a/a4/Hubble_Takes_Close-up_Portrait_of_Jupiter.png",
             texture: "https://upload.wikimedia.org/wikipedia/commons/e/e2/Jupiter.jpg",
-            atmoColor: "rgba(230, 190, 140, 0.6)",
-            atmoGlow: "rgba(210, 160, 100, 0.35)",
+            cutout: "https://upload.wikimedia.org/wikipedia/commons/e/ed/3D_Jupiter.png",
+            atmoColor: "rgba(230, 190, 140, 0.65)",
+            atmoGlow: "rgba(210, 160, 100, 0.40)",
             stats: {
               distance: "778.5M km (5.20 AU)",
               orbitPeriod: "11.86 Earth Years",
@@ -1571,6 +1943,15 @@
               moons: "95 Confirmed",
               gravity: "24.79 m/s² (2.53g)"
             },
+            pressureText: "Atmospheric Pressure: Increases smoothly from 1 bar at cloud top to over 2,000,000 bar in the interior, transitioning gas directly into supercritical fluid metallic hydrogen.",
+            interiorText: "Gaseous molecular hydrogen outer envelope, transitioning at depth to an ocean of liquid metallic hydrogen conducting colossal electric currents, surrounding a dense diffuse rock-and-ice core (~12–45 Earth masses).",
+            atmosphereGases: [
+              { name: 'Hydrogen (H₂)', pct: '89.8%', color: '#38bdf8' },
+              { name: 'Helium (He)', pct: '10.2%', color: '#fbbf24' },
+              { name: 'Methane (CH₄)', pct: '0.3%', color: '#a7f3d0' },
+              { name: 'Ammonia (NH₃)', pct: '0.026%', color: '#f472b6' }
+            ],
+            missions: "Pioneer 10 & 11 · Voyager 1 & 2 · Galileo Orbiter & Atmospheric Probe (1995–2003) · New Horizons flyby (2007) · Juno (2016–Present, polar orbiter) · JUICE (ESA, en route) · Europa Clipper (NASA, en route).",
             facts: [
               { label: "Great Red Spot", detail: "An anticyclonic storm larger than planet Earth that has churned fiercely for over three centuries." },
               { label: "Gravitational Guardian", detail: "Its massive gravitational field captures and redirects rogue asteroids, guarding the inner solar system." },
@@ -1578,13 +1959,20 @@
             ]
           },
           saturn: {
+            id: 'saturn',
+            orderNum: 6,
+            orderTitle: '6th Planet from Sun',
             name: 'SATURN',
             type: 'Gas Giant',
+            diameter: '116,460 KM (9.14 Earths)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 9.58 AU · ORBITAL VELOCITY: 9.7 KM/S · INCLINATION: 2.5°',
             lede: "Adorned with a dazzling system of icy rings, Saturn is an iconic jewel of our cosmos. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "Celebrated for its majestic ring architecture spanning 282,000 km yet averaging merely 10 to 30 meters in thickness. Saturn is the only planet with a bulk density lower than water (0.687 g/cm³). Swaddled in muted golden ammonia clouds, it commands 146 confirmed moons—including Titan, with methane lakes and hydrologic cycle, and Enceladus with active cryovolcanic plumes.",
             still: "https://upload.wikimedia.org/wikipedia/commons/c/c7/Saturn_during_Equinox.jpg",
             texture: "https://upload.wikimedia.org/wikipedia/commons/e/ea/Solarsystemscope_texture_2k_saturn.jpg",
-            atmoColor: "rgba(235, 205, 150, 0.6)",
-            atmoGlow: "rgba(215, 175, 110, 0.35)",
+            cutout: "https://upload.wikimedia.org/wikipedia/commons/c/c0/3D_Saturn.png",
+            atmoColor: "rgba(235, 205, 150, 0.65)",
+            atmoGlow: "rgba(215, 175, 110, 0.40)",
             stats: {
               distance: "1.43B km (9.58 AU)",
               orbitPeriod: "29.45 Earth Years",
@@ -1593,6 +1981,15 @@
               moons: "146 Confirmed",
               gravity: "10.44 m/s² (1.06g)"
             },
+            pressureText: "Atmospheric Pressure: 1.4 bar at cloud tops, scaling rapidly beyond 1,000,000 bar at the liquid metallic hydrogen boundary.",
+            interiorText: "Liquid molecular hydrogen envelope grading into liquid metallic hydrogen, around a heavy element core of molten rock, silicates, and ices (~9–22 Earth masses).",
+            atmosphereGases: [
+              { name: 'Hydrogen (H₂)', pct: '96.3%', color: '#60a5fa' },
+              { name: 'Helium (He)', pct: '3.25%', color: '#f59e0b' },
+              { name: 'Methane (CH₄)', pct: '0.45%', color: '#34d399' },
+              { name: 'Ammonia (NH₃)', pct: '0.01%', color: '#f43f5e' }
+            ],
+            missions: "Pioneer 11 (1979) · Voyager 1 & 2 (1980–1981) · Cassini-Huygens Mission (2004–2017: orbited Saturn for 13 years, deployed Huygens probe on Titan, Grand Finale dive into Saturn).",
             facts: [
               { label: "Breathtaking Ring System", detail: "Rings span 282,000 km across yet average just 10 to 30 meters thick, made of pure sparkling water ice." },
               { label: "Less Dense Than Water", detail: "Saturn has the lowest bulk density of any planet; it would literally float if placed in an ocean large enough." },
@@ -1600,21 +1997,36 @@
             ]
           },
           uranus: {
+            id: 'uranus',
+            orderNum: 7,
+            orderTitle: '7th Planet from Sun',
             name: 'URANUS',
             type: 'Ice Giant',
+            diameter: '50,724 KM (3.98 Earths)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 19.2 AU · ORBITAL VELOCITY: 6.8 KM/S · INCLINATION: 0.8°',
             lede: "An enigmatic ice giant that rolls around the Sun on its side like a bowling ball. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "An ice giant rotating on its side with an extreme 97.8° axial obliquity, likely tipped by a cataclysmic protoplanetary collision in the early solar system. This orientation produces 42-year polar summers of unbroken sunlight followed by 42-year dark winters. Its pale cyan tint arises from atmospheric methane filtering red light, and it holds the record for coldest recorded planetary atmosphere at -224°C.",
             still: "https://upload.wikimedia.org/wikipedia/commons/3/3d/Uranus2.jpg",
             texture: "https://upload.wikimedia.org/wikipedia/commons/9/95/Solarsystemscope_texture_2k_uranus.jpg",
-            atmoColor: "rgba(130, 235, 245, 0.65)",
-            atmoGlow: "rgba(90, 210, 230, 0.4)",
+            cutout: "https://upload.wikimedia.org/wikipedia/commons/3/32/3D_Uranus.png",
+            atmoColor: "rgba(130, 235, 245, 0.70)",
+            atmoGlow: "rgba(90, 210, 230, 0.45)",
             stats: {
               distance: "2.87B km (19.2 AU)",
               orbitPeriod: "84 Earth Years",
-              dayLength: "17h 14m",
+              dayLength: "17h 14m (Retrograde)",
               temperature: "-224°C coldest recorded",
               moons: "28 Confirmed",
               gravity: "8.69 m/s² (0.89g)"
             },
+            pressureText: "Atmospheric Pressure: 1.2 bar at upper methane cloud deck, rising to hundreds of kilobars inside the dense volatile mantle.",
+            interiorText: "Thin gaseous hydrogen-helium atmosphere overlaying a dense slushy supercritical mantle of water, ammonia, and methane ices ('superionic hot ice'), surrounding a small rocky silicate-iron core (~0.55 Earth masses).",
+            atmosphereGases: [
+              { name: 'Hydrogen (H₂)', pct: '82.5%', color: '#38bdf8' },
+              { name: 'Helium (He)', pct: '15.2%', color: '#fbbf24' },
+              { name: 'Methane (CH₄)', pct: '2.3%', color: '#2dd4bf' }
+            ],
+            missions: "Voyager 2 (Historic rendezvous on January 24, 1986; discovered 10 new moons, 2 new rings, and surveyed its complex tilted magnetic field). Primary target for upcoming flagship decadal missions.",
             facts: [
               { label: "Extreme Axial Tilt", detail: "Tilted at a radical 98° angle, causing 42 years of continuous polar summer sunlight followed by 42 years of winter darkness." },
               { label: "Superheated Icy Slush", detail: "Its deep mantle consists of high-pressure fluid water, ammonia, and methane often termed 'hot ice'." },
@@ -1622,13 +2034,20 @@
             ]
           },
           neptune: {
+            id: 'neptune',
+            orderNum: 8,
+            orderTitle: '8th Planet from Sun',
             name: 'NEPTUNE',
             type: 'Ice Giant',
+            diameter: '49,244 KM (3.86 Earths)',
+            telemetrySubhead: 'SEMI-MAJOR AXIS: 30.1 AU · ORBITAL VELOCITY: 5.4 KM/S · INCLINATION: 1.8°',
             lede: "A dark, cold supersonic world whipped by the fastest planetary winds ever measured. Course enrollment <br>starts today. Early Bird tickets typically last a week, don&rsquo;t miss out!",
+            scientificOverview: "The outermost major planet in the solar system, Neptune is a deep azure ice giant lashed by supersonic jet streams exceeding 2,100 km/h—the fastest atmospheric winds ever documented. Its vivid cobalt coloration comes from methane absorption. Discovered in 1846 via gravitational math by Urbain Le Verrier before ever being seen in a telescope, Neptune also hosts Triton, a geologically active retrograde moon erupting liquid nitrogen geysers.",
             still: "https://upload.wikimedia.org/wikipedia/commons/6/63/Neptune_-_Voyager_2_%2829347980845%29_flatten_crop.jpg",
             texture: "https://upload.wikimedia.org/wikipedia/commons/0/06/Neptune.jpg",
-            atmoColor: "rgba(70, 140, 255, 0.7)",
-            atmoGlow: "rgba(40, 110, 245, 0.45)",
+            cutout: "https://upload.wikimedia.org/wikipedia/commons/d/da/3D_Neptune.png",
+            atmoColor: "rgba(70, 140, 255, 0.75)",
+            atmoGlow: "rgba(40, 110, 245, 0.50)",
             stats: {
               distance: "4.50B km (30.1 AU)",
               orbitPeriod: "164.8 Earth Years",
@@ -1637,6 +2056,14 @@
               moons: "16 Confirmed",
               gravity: "11.15 m/s² (1.14g)"
             },
+            pressureText: "Atmospheric Pressure: 1 to 5 bar at cloud decks, scaling to mega-bar pressures in the deep superheated fluid mantle.",
+            interiorText: "Superheated, electrically conductive supercritical fluid mantle composed of water, methane, and ammonia ('hot ice'), surrounding a solid iron-silicate core approximately 1.2 times Earth's mass.",
+            atmosphereGases: [
+              { name: 'Hydrogen (H₂)', pct: '80.0%', color: '#3b82f6' },
+              { name: 'Helium (He)', pct: '19.0%', color: '#f59e0b' },
+              { name: 'Methane (CH₄)', pct: '1.5%', color: '#06b6d4' }
+            ],
+            missions: "Voyager 2 (Epic flyby on August 25, 1989; discovered the Great Dark Spot, companion 'Scooter' cloud, five new moons, and captured Triton's active cryovolcanic geysers).",
             facts: [
               { label: "Supersonic Winds", detail: "High-altitude storm winds scream through methane clouds at over 2,100 km/h (1,300 mph)." },
               { label: "Found by Math", detail: "The only planet pinpointed through Newtonian gravitational calculations before ever being viewed through a telescope." },
@@ -2767,8 +3194,58 @@
           const p = PLANETS[planetKey];
           if (!p) return;
 
+          // Dynamic Dossier Palette Theming
+          if (dossierModal) {
+            dossierModal.style.setProperty('--dossier-accent', p.atmoColor || 'rgba(121, 220, 232, 0.75)');
+            dossierModal.style.setProperty('--dossier-glow', p.atmoGlow || 'rgba(121, 220, 232, 0.35)');
+            dossierModal.style.setProperty('--dossier-border', p.atmoColor ? p.atmoColor.replace(/[\d\.]+\)$/, '0.45)') : 'rgba(121, 220, 232, 0.45)');
+          }
+
+          // Celestial Globe & Header Elements
+          const globeImg = document.getElementById('dossier-globe-img');
           const badgeEl = document.getElementById('dossier-badge');
+          const orderTag = document.getElementById('dossier-order-tag');
+          const diameterTag = document.getElementById('dossier-diameter-tag');
           const titleEl = document.getElementById('dossier-title');
+          const telemetrySubhead = document.getElementById('dossier-telemetry-subhead');
+
+          if (globeImg) {
+            globeImg.src = p.cutout || p.still;
+            globeImg.alt = `${p.name} preview`;
+          }
+          if (badgeEl) badgeEl.textContent = p.type;
+          if (orderTag) orderTag.textContent = p.orderTitle || (p.orderNum ? `${p.orderNum}TH PLANET` : '');
+          if (diameterTag) diameterTag.textContent = p.diameter ? `DIAMETER: ${p.diameter}` : '';
+          if (titleEl) titleEl.textContent = p.name;
+          if (telemetrySubhead) telemetrySubhead.textContent = p.telemetrySubhead || '';
+
+          // Quick Planet Cycle Navigation
+          const currentIndex = ORDER.indexOf(planetKey);
+          const prevIndex = (currentIndex - 1 + ORDER.length) % ORDER.length;
+          const nextIndex = (currentIndex + 1) % ORDER.length;
+          const prevPlanet = ORDER[prevIndex];
+          const nextPlanet = ORDER[nextIndex];
+
+          const prevBtn = document.getElementById('dossier-prev-btn');
+          const nextBtn = document.getElementById('dossier-next-btn');
+          const prevLabel = document.getElementById('dossier-prev-label');
+          const nextLabel = document.getElementById('dossier-next-label');
+
+          if (prevBtn) prevBtn.dataset.planet = prevPlanet;
+          if (nextBtn) nextBtn.dataset.planet = nextPlanet;
+          if (prevLabel) prevLabel.textContent = `Prev: ${PLANETS[prevPlanet].name}`;
+          if (nextLabel) nextLabel.textContent = `Next: ${PLANETS[nextPlanet].name}`;
+
+          // Quick Planet Dots
+          const dotsContainer = document.getElementById('dossier-planet-dots');
+          if (dotsContainer) {
+            dotsContainer.innerHTML = ORDER.map((k, idx) => {
+              const isActive = k === planetKey;
+              return `<button type="button" class="dossier-dot ${isActive ? 'is-active' : ''}" data-planet="${k}" role="tab" aria-selected="${isActive}" aria-label="${PLANETS[k].name}" title="${PLANETS[k].name} (${idx + 1}/${ORDER.length})"></button>`;
+            }).join('');
+          }
+
+          // Tab Panel 1: Telemetry & Overview
           const ledeModalEl = document.getElementById('dossier-lede');
           const distEl = document.getElementById('dossier-distance');
           const orbitEl = document.getElementById('dossier-orbit');
@@ -2776,11 +3253,8 @@
           const tempEl = document.getElementById('dossier-temp');
           const moonsEl = document.getElementById('dossier-moons');
           const gravEl = document.getElementById('dossier-gravity');
-          const factsContainer = document.getElementById('dossier-facts');
 
-          if (badgeEl) badgeEl.textContent = p.type;
-          if (titleEl) titleEl.textContent = p.name;
-          if (ledeModalEl) ledeModalEl.innerHTML = p.lede.replace(/<br>/g, ' ');
+          if (ledeModalEl) ledeModalEl.innerHTML = p.scientificOverview || p.lede.replace(/<br>/g, ' ');
           if (distEl) distEl.textContent = p.stats.distance;
           if (orbitEl) orbitEl.textContent = p.stats.orbitPeriod;
           if (dayEl) dayEl.textContent = p.stats.dayLength;
@@ -2788,9 +3262,57 @@
           if (moonsEl) moonsEl.textContent = p.stats.moons;
           if (gravEl) gravEl.textContent = p.stats.gravity;
 
-          if (factsContainer) {
-            factsContainer.innerHTML = p.facts.map(f => `
-              <div class="fact-card">
+          // Solar System Distance Spectrum Active Marker
+          const traj = ORBITAL_TRAJECTORIES[planetKey];
+          const spectrumAu = document.getElementById('spectrum-current-au');
+          if (spectrumAu) {
+            spectrumAu.textContent = traj ? `${traj.semiMajorAxisAU.toFixed(2)} AU` : p.stats.distance;
+          }
+          const markers = document.querySelectorAll('.spectrum-marker');
+          markers.forEach(m => {
+            const idx = parseInt(m.dataset.index, 10);
+            m.classList.toggle('is-active', idx === currentIndex);
+          });
+
+          // Tab Panel 2: Atmosphere & Interior
+          function formatFormula(str) {
+            if (!str) return '';
+            return str
+              .replace(/₂/g, '<sub>2</sub>')
+              .replace(/₄/g, '<sub>4</sub>')
+              .replace(/₃/g, '<sub>3</sub>')
+              .replace(/⁻¹⁴/g, '<sup>-14</sup>');
+          }
+
+          const meterBar = document.getElementById('atmo-meter-bar');
+          const gasesLegend = document.getElementById('atmo-gases-legend');
+          if (meterBar && p.atmosphereGases) {
+            meterBar.innerHTML = p.atmosphereGases.map(g =>
+              `<div class="atmo-meter-seg" style="width:${g.pct}; background:${g.color};" title="${g.name.replace(/[₂₄₃]/g, '')}: ${g.pct}"></div>`
+            ).join('');
+          }
+          if (gasesLegend && p.atmosphereGases) {
+            gasesLegend.innerHTML = p.atmosphereGases.map(g => `
+              <div class="atmo-gas-badge">
+                <span class="atmo-gas-dot" style="background:${g.color};"></span>
+                <span class="atmo-gas-name">${formatFormula(g.name)}</span>
+                <span class="atmo-gas-pct" style="color:var(--dossier-accent, #79dce8); font-weight:600; margin-left:calc(4 * var(--u));">${g.pct}</span>
+              </div>
+            `).join('');
+          }
+          const pressureEl = document.getElementById('atmo-pressure-text');
+          if (pressureEl) pressureEl.innerHTML = formatFormula(p.pressureText) || 'Data pending telemetry pass.';
+          const interiorEl = document.getElementById('atmo-interior-text');
+          if (interiorEl) interiorEl.textContent = p.interiorText || 'Data pending telemetry pass.';
+
+          // Tab Panel 3: Missions & Intelligence
+          const missionsEl = document.getElementById('dossier-missions');
+          if (missionsEl) missionsEl.textContent = p.missions || 'No close orbital flybys recorded.';
+
+          const factsContainer = document.getElementById('dossier-facts');
+          if (factsContainer && p.facts) {
+            factsContainer.innerHTML = p.facts.map((f, i) => `
+              <div class="fact-card" style="animation-delay: ${0.05 * (i + 1)}s">
                 <div class="fact-title">${f.label}</div>
                 <div class="fact-detail">${f.detail}</div>
               </div>
@@ -2805,6 +3327,58 @@
               card.style.animation = '';
             }
           }
+        }
+
+        // Tab Switching Handler
+        const tabButtons = document.querySelectorAll('.dossier-tab');
+        const tabPanels = document.querySelectorAll('.dossier-panel');
+
+        function activateTab(tabId) {
+          tabButtons.forEach(btn => {
+            const isActive = btn.dataset.target === tabId;
+            btn.classList.toggle('is-active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          });
+          tabPanels.forEach(panel => {
+            panel.classList.toggle('is-active', panel.id === tabId);
+          });
+        }
+
+        tabButtons.forEach(btn => {
+          btn.addEventListener('click', () => {
+            if (btn.dataset.target) {
+              activateTab(btn.dataset.target);
+            }
+          });
+        });
+
+        // Quick Navigation Buttons inside Dossier Modal
+        const prevBtn = document.getElementById('dossier-prev-btn');
+        const nextBtn = document.getElementById('dossier-next-btn');
+        if (prevBtn) {
+          prevBtn.addEventListener('click', () => {
+            if (prevBtn.dataset.planet) {
+              show(prevBtn.dataset.planet);
+            }
+          });
+        }
+        if (nextBtn) {
+          nextBtn.addEventListener('click', () => {
+            if (nextBtn.dataset.planet) {
+              show(nextBtn.dataset.planet);
+            }
+          });
+        }
+
+        // Quick Navigation Dots inside Dossier Modal
+        const dotsContainer = document.getElementById('dossier-planet-dots');
+        if (dotsContainer) {
+          dotsContainer.addEventListener('click', (e) => {
+            const dot = e.target.closest('.dossier-dot');
+            if (dot && dot.dataset.planet) {
+              show(dot.dataset.planet);
+            }
+          });
         }
 
         function openDossier() {
