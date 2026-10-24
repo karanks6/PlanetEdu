@@ -7,7 +7,7 @@
 [![Tests](https://img.shields.io/badge/Unit%20Tests-Node.js%20Test%20Runner-brightgreen.svg)](https://nodejs.org/api/test.html)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-**PlanetEdu** is a high-performance, GPU-accelerated educational web experience featuring a full-viewport cinematic hero horizon. It delivers custom WebGL GLSL shaders, authentic Keplerian orbital mechanics, procedural atmospheric dynamics for terrestrial and gas/ice giants, and an interactive scientific dossier modal.
+**PlanetEdu** is a high-performance, GPU-accelerated educational web experience featuring a full-viewport cinematic hero horizon. It delivers custom WebGL GLSL shaders, authentic Keplerian orbital mechanics, procedural atmospheric dynamics for terrestrial, gas, and ice giants, and an interactive NASA/JPL-grade planetary intelligence terminal.
 
 ---
 
@@ -18,8 +18,8 @@
   - [1. Real-Time WebGL Atmospheric & Ring Shaders](#1-real-time-webgl-atmospheric--ring-shaders)
   - [2. Procedural & High-Fidelity Planetary Texturing](#2-procedural--high-fidelity-planetary-texturing)
   - [3. Orbital Trajectory Telemetry HUD](#3-orbital-trajectory-telemetry-hud)
-  - [4. Cinematic Planetary Dossier Modal](#4-cinematic-planetary-dossier-modal)
-  - [5. Developer Info Profile Integration](#5-developer-info-profile-integration)
+  - [4. Planetary Intelligence Dossier Modal ("GET STARTED")](#4-planetary-intelligence-dossier-modal-get-started)
+  - [5. Developer Information Modal](#5-developer-information-modal)
 - [Planetary Motion & Scientific Mechanics](#planetary-motion--scientific-mechanics)
 - [Architecture & File Structure](#architecture--file-structure)
 - [Getting Started](#getting-started)
@@ -28,6 +28,9 @@
   - [Development Server](#development-server)
   - [Building for Production](#building-for-production)
   - [Running Unit Tests & Linting](#running-unit-tests--linting)
+- [Hosting & Deployment Guide](#hosting--deployment-guide)
+  - [Option A: Hosting on Vercel](#option-a-hosting-on-vercel-recommended--free--instant)
+  - [Option B: Hosting on Render](#option-b-hosting-on-render-free-static-site)
 - [Testing & Quality Assurance](#testing--quality-assurance)
 - [Developer & Credits](#developer--credits)
 - [License](#license)
@@ -38,7 +41,7 @@
 
 Traditional web hero sections often rely on static stock photography or pre-rendered videos that look rigid and disconnect users from the real physics of our solar system. **PlanetEdu** bridges astronomical science and modern frontend graphics engineering by rendering all 8 solar system planets via an interactive WebGL canvas paired with procedural textures and physical shader raymarching.
 
-Users can traverse the entire Solar System in canonical distance order—from sun-scorched Mercury to distant, supersonic Neptune—observing axial tilts, differential wind shear, and multi-band atmospheric circulation.
+Users can traverse the entire Solar System in canonical distance order—from sun-scorched Mercury to distant, supersonic Neptune—observing axial tilts, differential wind shear, multi-band atmospheric circulation, and comprehensive spacecraft exploration intelligence.
 
 ---
 
@@ -52,7 +55,7 @@ The custom vertex and fragment shaders (`VS_SOURCE` and `FS_SOURCE`) run at 60 F
   - Multi-zone ring anatomy: C Ring (faint crepe ring), dense B Ring, dark Cassini Division gap, and A Ring with the Encke division.
   - Keplerian particle motion shimmer: inner ring particles orbit faster than outer particles.
   - Dynamic ring shadows cast onto the planet disc, and planet shadow cast onto the back of the rings.
-  - Central reading vignette clearance ensuring 100% typography contrast.
+  - Central reading vignette clearance ensuring 100% typography contrast for hero text.
 - **Uranus Sideways Rotation**:
   - Simulates Uranus's iconic 97.77° axial tilt by rotating the sphere normal vector coordinates by ~78.5° in the viewport plane.
   - Retrograde rotation with differential atmospheric zonal wave shear.
@@ -79,22 +82,41 @@ The custom vertex and fragment shaders (`VS_SOURCE` and `FS_SOURCE`) run at 60 F
   - **Orbital Inclination (Degrees relative to the ecliptic)**
 - Zero visual collision with title typography or side navigation buttons.
 
-### 4. Cinematic Planetary Dossier Modal
-- Activated via the central **"GET STARTED"** call to action.
-- **3D Perspective Scale-Up Entrance (`dossierCardScaleUp`)**:
-  - Modal card scales and rotates into the viewport from `perspective(1200px) scale(0.74) translateY(44px) rotateX(8deg)` to `scale(1) translateY(0) rotateX(0deg)` with custom aerospace easing (`cubic-bezier(0.16, 1, 0.3, 1)`).
-  - Ambient backdrop with radial gradient lighting and deep spatial blur (`16px`).
-- **Orchestrated Staggered Cascade**:
-  - Header badge and title reveal (`+0.08s` to `+0.12s`).
-  - Lede description text reveal (`+0.18s`).
-  - 6 planetary metrics cards sequentially cascade in (`+0.22s` to `+0.52s`).
-  - Scientific intelligence facts cascade in with left-slide animation (`+0.60s` to `+0.76s`).
-  - Automatic reflow reset so changing planets while the dossier is open smoothly restarts the cascade.
-  - Complete `@media (prefers-reduced-motion: reduce)` accessibility compliance.
+### 4. Planetary Intelligence Dossier Modal ("GET STARTED")
+Clicking the central **GET STARTED** button opens a high-precision cosmic terminal:
+- **Celestial Header & Dynamic Planetary Theming**:
+  - High-resolution 3D planet globe preview centered inside a counter-rotating dashed orbital ring.
+  - Dynamic Palette Theming: Modal border, atmospheric glows, and accent elements dynamically inherit each planet's atmospheric color palette (`--dossier-accent`, `--dossier-glow`, and `--dossier-border`).
+  - Metadata tags: Planetary class (e.g., `TERRESTRIAL PLANET`, `GAS GIANT`, `ICE GIANT`), orbital position tag (e.g., `1ST PLANET FROM SUN`), diameter, and orbital telemetry subhead.
+- **In-Modal Navigation & Quick Switcher**:
+  - Previous and Next buttons with dynamic labels showing adjacent planets in canonical solar distance order.
+  - 8 interactive orbital progress nodes allowing immediate switching to any planet directly within the modal.
+  - Bi-directional sync: switching planets inside the modal automatically updates the background WebGL 3D simulation, top telemetry HUD, and hero text.
+- **3 Segmented Functional Tabs**:
+  1. **Telemetry & Overview**:
+     - Authoritative scientific overview prose.
+     - 6-metric telemetry grid with tabular numerals: Distance from Sun, Orbital Period, Solar Day Length, Mean Temperature, Confirmed Moons, and Surface Gravity.
+     - **Solar System Orbital Radius Spectrum**: Interactive mini-map showing the Sun (Sol) and orbital radius positions across the solar system (Inner Terrestrials, Asteroid Belt, Gas & Ice Giants, Kuiper Belt) with the active planet highlighted.
+  2. **Atmosphere & Interior**:
+     - Visual multi-color atmospheric composition progress bar.
+     - Scientific gas breakdown badges with formatted chemical formulas (`O₂`, `N₂`, `CO₂`, `CH₄`, `NH₃`, `H₂O`) and percentages.
+     - Surface pressure telemetry (e.g., `< 10⁻¹⁴ bar` exosphere to `92 bar` crushing supercritical greenhouse atmospheres).
+     - Geological and core interior architecture analysis.
+  3. **Missions & Intelligence**:
+     - Spacecraft exploration milestones (Mariner, MESSENGER, BepiColombo, Venera, Apollo, Curiosity, Perseverance, Juno, Cassini, Voyager 2, etc.).
+     - Hairline-bordered planetary intelligence fact cards with staggered cascading reveals.
 
-### 5. Developer Info Profile Integration
-- Sleek information icon button `(i)` integrated directly into the navigation bar.
-- Dedicated Developer Information modal displaying developer name, direct email contact, and verified GitHub profile link.
+### 5. Developer Information Modal
+Clicking the `(i)` button in the top-right of the navigation bar opens the Developer Info profile:
+- **Header Profile**:
+  - Monogram avatar badge with a counter-rotating dashed orbital ring and active status dot.
+  - Creative Architect title badge and developer name: **Karan S Suvarna**.
+  - **Top-Right Close Button**: Positioned cleanly in the top-right corner via full-width flexbox layout.
+- **Craftsmanship Statement**: Statement on synthesizing astrophysics with real-time procedural WebGL GLSL shaders.
+- **Interactive Action Cards**:
+  - **GitHub & Source Code**: Direct link to profile ([github.com/karanks6](https://github.com/karanks6)) and repository ([github.com/karanks6/PlanetEdu](https://github.com/karanks6/PlanetEdu)).
+  - **Direct Inquiries**: Email link and 1-click clipboard copy button with feedback toast.
+- **System Architecture & Capabilities**: Technical tags highlighting WebGL & GLSL Shaders, Keplerian Orbital Telemetry, Procedural Atmospheres, Saturn 3D Tilted Rings, TypeScript & ESM, and Responsive Canvas Compositing.
 
 ---
 
@@ -126,7 +148,7 @@ The application adheres strictly to the canonical solar sequence and Keplerian l
 
 ```
 ├── .env.example              # Environment variables template
-├── index.html                # Main application entry point, WebGL canvas, and responsive hero
+├── index.html                # Main application entry point, WebGL canvas, shaders, UI & modals
 ├── metadata.json             # AI Studio applet configuration and capabilities
 ├── package.json              # Project dependencies, scripts, and engine specifications
 ├── tsconfig.json             # TypeScript compiler options
@@ -137,7 +159,9 @@ The application adheres strictly to the canonical solar sequence and Keplerian l
 │   ├── App.tsx               # Auxiliary React component mounting point
 │   ├── main.tsx              # React DOM entry
 │   └── index.css             # Tailwind CSS global styles
-└── README.md                 # Project documentation
+├── vercel.json               # Pre-configured deployment settings for Vercel
+├── render.yaml               # Pre-configured deployment blueprint for Render
+└── README.md                 # Comprehensive project documentation
 ```
 
 ---
@@ -151,8 +175,8 @@ The application adheres strictly to the canonical solar sequence and Keplerian l
 ### Installation
 Clone the repository and install all dependencies:
 ```bash
-git clone <repository-url>
-cd <repository-directory>
+git clone https://github.com/karanks6/PlanetEdu.git
+cd PlanetEdu
 npm install
 ```
 
@@ -187,7 +211,7 @@ npm run lint
 
 ## Hosting & Deployment Guide
 
-This project is a high-performance modern web application built on Vite. It is pre-configured with `vercel.json` and `render.yaml` for zero-configuration, 1-click deployment on both **Vercel** and **Render**.
+This project is pre-configured with `vercel.json` and `render.yaml` for zero-configuration, 1-click deployment on both **Vercel** and **Render**.
 
 ### Option A: Hosting on Vercel (Recommended — Free & Instant)
 
@@ -198,9 +222,9 @@ Vercel provides edge CDN delivery, automatic SSL, and instant continuous deploym
    ```bash
    git init
    git add .
-   git commit -m "feat: complete PlanetEdu cinematic hero"
+   git commit -m "feat: complete PlanetEdu cosmic platform"
    git branch -M main
-   git remote add origin https://github.com/<your-username>/<your-repo-name>.git
+   git remote add origin https://github.com/karanks6/PlanetEdu.git
    git push -u origin main
    ```
 2. **Import into Vercel**:
@@ -217,7 +241,6 @@ Vercel provides edge CDN delivery, automatic SSL, and instant continuous deploym
    - In ~20 seconds, your website will be live on a production URL: `https://<your-project>.vercel.app`.
 
 #### Method 2: Via Vercel CLI
-If you prefer deploying directly from your local terminal without Git:
 ```bash
 npm install -g vercel
 vercel login
@@ -234,7 +257,7 @@ vercel --prod
 Render offers free static site hosting with built-in SSL and continuous deployment from GitHub.
 
 #### Method 1: Using the Included Blueprint (`render.yaml`)
-1. Push your code to a GitHub repository.
+1. Push your code to your GitHub repository.
 2. Go to the [Render Dashboard](https://dashboard.render.com).
 3. Click the **"New +"** button in the top right and select **"Blueprint"**.
 4. Connect your GitHub repository.
@@ -258,7 +281,6 @@ Render offers free static site hosting with built-in SSL and continuous deployme
    - **Source**: `/*`
    - **Destination**: `/index.html`
 5. Click **"Create Static Site"**.
-6. Render builds the project and publishes it to `https://planet-edu.onrender.com`.
 
 ---
 
@@ -269,7 +291,7 @@ The codebase includes automated unit tests covering all pure logic and astronomi
 - **Canonical Order**: Asserts that all 8 planets follow the exact solar distance order.
 - **Orbital Reversibility**: Verifies that rotating left or right through all 8 planets loops indefinitely with zero indexing defects.
 - **Telemetry Validity**: Ensures non-zero positive semi-major axis, orbital period, and valid Keplerian velocity ordering ($v_{Mercury} > v_{Earth} > v_{Neptune}$).
-- **Data Completeness**: Validates that all planetary stats, fact entries, and HTTPS asset URLs are intact.
+- **Data Completeness**: Validates that all planetary stats, fact entries, atmospheric breakdowns, and HTTPS asset URLs are intact.
 
 ---
 
@@ -278,6 +300,7 @@ The codebase includes automated unit tests covering all pure logic and astronomi
 - **Developer**: Karan S Suvarna
 - **Email**: [suvarnakaran77@gmail.com](mailto:suvarnakaran77@gmail.com)
 - **GitHub**: [@karanks6](https://github.com/karanks6)
+- **Repository**: [github.com/karanks6/PlanetEdu](https://github.com/karanks6/PlanetEdu)
 
 ---
 
