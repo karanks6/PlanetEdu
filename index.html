@@ -349,11 +349,21 @@
       }
 
       /* Developer Profile Header */
+      .dev-header-flex {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: calc(16 * var(--u));
+        margin-bottom: 0;
+        width: 100%;
+      }
+
       .dev-header-profile {
         display: flex;
         align-items: center;
         gap: calc(18 * var(--u));
         min-width: 0;
+        flex: 1;
       }
 
       .dev-avatar-wrap {
@@ -1607,7 +1617,7 @@
       <div class="modal-backdrop" id="dev-info-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="dev-info-title">
         <div class="modal-card dev-modal-card">
           <!-- Header Profile Zone -->
-          <div class="modal-header dev-cascade-1" style="align-items: center; margin-bottom: 0;">
+          <div class="dev-header-flex dev-cascade-1">
             <div class="dev-header-profile">
               <div class="dev-avatar-wrap" aria-hidden="true">
                 <div class="dev-avatar-ring"></div>
